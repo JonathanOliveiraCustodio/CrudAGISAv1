@@ -20,10 +20,10 @@ CREATE TABLE aluno (
     anoIngresso					INT,
     semestreIngresso			INT,
     semestreAnoLimiteGraduacao  DATE,
-    RA							INT
---	curso						INT
+    RA							INT,
+	curso						INT
 	PRIMARY KEY (CPF)
---	FOREIGN KEY (curso) REFERENCES curso(codigo)
+	FOREIGN KEY (curso) REFERENCES curso(codigo)
 )
 GO
 
@@ -157,15 +157,15 @@ SELECT codigo, nome, cargaHoraria, sigla, ultimaNotaENADE, turno FROM curso
 SELECT * FROM v_listarCurso
 
 CREATE VIEW v_listarAluno AS
-SELECT CPF, nome, nomeSocial, dataNascimento, telefoneContato,
-emailPessoal, emailCorporativo, dataConclusao2Grau, instituicaoConclusao2Grau,
-pontuacaoVestibular, posicaoVestibular, anoIngresso, semestreIngresso,
-semestreAnoLimiteGraduacao, RA FROM aluno
-
-
-
+SELECT a.CPF, a.nome, a.nomeSocial, a.dataNascimento, a.telefoneContato,
+a.emailPessoal, a.emailCorporativo, a.dataConclusao2Grau, a.instituicaoConclusao2Grau, 
+a.pontuacaoVestibular, a.posicaoVestibular, a.anoIngresso, a.semestreIngresso, 
+a.semestreAnoLimiteGraduacao, a.RA, c.codigo AS codigoCurso, c.nome AS nomeCurso
+FROM aluno a JOIN curso c ON a.curso = c.codigo
 
 SELECT * FROM v_listarAluno
+
+
 
 INSERT INTO professor VALUES
 (1, 'João Silva', 'Doutor'),
@@ -248,6 +248,84 @@ EXEC sp_iud_professor 'D', 22113, 'Teste Prof 1', 'Doutosr', @out1 OUTPUT
 PRINT @out1
 
 SELECT * FROM professor
+
+CREATE PROCEDURE sp_iud_curso 
+    @acao CHAR(1), 
+    @codigo INT, 
+    @nome VARCHAR(100), 
+    @cargaHoraria INT,
+    @sigla VARCHAR(10),
+    @ultimaNotaENADE DECIMAL(5,2),
+    @turno VARCHAR(20),
+    @saida VARCHAR(100) OUTPUT
+AS
+BEGIN
+    DECLARE @validoCodigo BIT
+
+    -- Verificar se o código é válido
+    IF (@codigo >= 0 AND @codigo <= 100)
+    BEGIN
+        SET @validoCodigo = 1
+    END
+    ELSE
+    BEGIN
+        SET @validoCodigo = 0
+    END
+
+    IF (@acao = 'I')
+    BEGIN
+        -- Inserir curso
+        IF @validoCodigo = 1
+        BEGIN
+            INSERT INTO curso (codigo, nome, cargaHoraria, sigla, ultimaNotaENADE, turno) 
+            VALUES (@codigo, @nome, @cargaHoraria, @sigla, @ultimaNotaENADE, @turno)
+            SET @saida = 'Curso inserido com sucesso'
+        END
+        ELSE
+        BEGIN
+            RAISERROR('Código de curso inválido', 16, 1)
+            RETURN
+        END
+    END
+    ELSE IF (@acao = 'U')
+    BEGIN
+        -- Atualizar curso
+        IF @validoCodigo = 1
+        BEGIN
+            UPDATE curso SET nome = @nome, cargaHoraria = @cargaHoraria, 
+            sigla = @sigla, ultimaNotaENADE = @ultimaNotaENADE, turno = @turno 
+            WHERE codigo = @codigo
+            SET @saida = 'Curso alterado com sucesso'
+        END
+        ELSE
+        BEGIN
+            RAISERROR('Código de curso inválido', 16, 1)
+            RETURN
+        END
+    END
+    ELSE BEGIN
+    IF (@acao = 'D')
+    BEGIN
+        -- Verificar se existem disciplinas associadas a este curso
+        IF EXISTS (SELECT 1 FROM disciplina WHERE codigoCurso = @codigo)
+        BEGIN
+            SET @saida = 'Não é possível excluir o curso pois existem disciplinas associadas a ele.';
+            RETURN;
+        END;
+
+        DELETE FROM curso WHERE codigo = @codigo;
+        SET @saida = 'Curso excluído com sucesso.';
+    END
+END
+END
+
+SELECT * FROM curso
+
+DECLARE @out1 VARCHAR(100);
+EXEC sp_iud_curso 'D', 1, 'Curso Teste', 400, 'CT', 8.5, 'Manhã', @out1 OUTPUT;
+PRINT @out1;
+
+
 
 
 -- Procedure que Valida CPF
@@ -384,6 +462,7 @@ CREATE PROCEDURE sp_iud_aluno
     @semestreIngresso INT,
     @semestreAnoLimiteGraduacao DATE OUTPUT,
     @RA VARCHAR(10) OUTPUT,
+	@curso INT,
     @saida VARCHAR(100) OUTPUT
 AS
 BEGIN
@@ -422,7 +501,7 @@ BEGIN
             @dataConclusao2Grau, @instituicaoConclusao2Grau,
             @pontuacaoVestibular, @posicaoVestibular,
             @anoIngresso, @semestreIngresso,
-            @semestreAnoLimiteGraduacao, @RA);
+            @semestreAnoLimiteGraduacao, @RA, @curso);
         SET @saida = 'Aluno inserido com sucesso.';
     END
     ELSE IF (UPPER(@acao) = 'U')
@@ -433,7 +512,7 @@ BEGIN
             dataConclusao2Grau = @dataConclusao2Grau, instituicaoConclusao2Grau = @instituicaoConclusao2Grau,
             pontuacaoVestibular = @pontuacaoVestibular, posicaoVestibular = @posicaoVestibular,
             anoIngresso = @anoIngresso, semestreIngresso = @semestreIngresso,
-            semestreAnoLimiteGraduacao = @semestreAnoLimiteGraduacao
+            semestreAnoLimiteGraduacao = @semestreAnoLimiteGraduacao, curso = @curso
         WHERE CPF = @CPF;
         SET @saida = 'Aluno atualizado com sucesso.';
     END
@@ -453,7 +532,7 @@ DECLARE @saida VARCHAR(100);
 DECLARE @semestreAnoLimiteGraduacao DATE;
 DECLARE @RA VARCHAR(10);
 
-EXEC sp_iud_aluno 'I', '62130702066', 'Fulano', 'fulano social', NULL, '123456789', 'fulano@email.com', NULL, NULL, NULL, 750.20, 1, 2020, 1, @semestreAnoLimiteGraduacao OUTPUT, @RA OUTPUT, @saida OUTPUT;
+EXEC sp_iud_aluno 'U', '38942231896', 'Jonathan', 'fulano social', '1990-07-31', '123456789', 'fulano@email.com', NULL, NULL, NULL, 750.20, 1, 2020, 1, @semestreAnoLimiteGraduacao OUTPUT, @RA OUTPUT,1, @saida OUTPUT;
 
 PRINT @saida;
 
