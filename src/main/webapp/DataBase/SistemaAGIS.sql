@@ -4,7 +4,6 @@ CREATE DATABASE SistemaAGIS
 
 USE SistemaAGIS 
 
--- Tabela Aluno
 CREATE TABLE aluno (
     CPF							CHAR(11) UNIQUE,
     nome						VARCHAR(100),
@@ -37,119 +36,87 @@ GO
 
 -- Tabela Curso
 CREATE TABLE curso (
-    codigo					INT CHECK (codigo >= 0 AND codigo <= 100)		NOT NULL,
-    nome					VARCHAR(100)									NOT NULL,
-    cargaHoraria			INT												NOT NULL,			
-    sigla					VARCHAR(10)										NOT NULL,
-    ultimaNotaENADE			DECIMAL(5,2)									NOT NULL,
-	turno					VARCHAR(20)										NOT NULL
-	PRIMARY KEY  (codigo)
+codigo					INT CHECK (codigo >= 0 AND codigo <= 100)		NOT NULL,
+nome					VARCHAR(100)									NOT NULL,
+cargaHoraria			INT												NOT NULL,			
+sigla					VARCHAR(10)										NOT NULL,
+ultimaNotaENADE			DECIMAL(5,2)									NOT NULL,
+turno					VARCHAR(20)										NOT NULL
+PRIMARY KEY  (codigo)
 )
 GO
 
 -- Tabela Disciplina
 CREATE TABLE disciplina (
-    codigo				INT IDENTITY (1001,1)		NOT NULL,
-    nome				VARCHAR(100)				NOT NULL,
-    horasSemanais		INT							NOT NULL,
-	codigoProfessor		INT							NOT NULL,
-	codigoCurso		INT							    NOT NULL
-	PRIMARY KEY (codigo)
-	FOREIGN KEY (codigoProfessor) REFERENCES professor(codigo),
-	FOREIGN KEY (codigoCurso) REFERENCES curso(codigo)
-)
-GO
-
-
-
-
-SELECT d.codigo, d.nome AS nomeDisciplina, d.horasSemanais, p.nome AS nomeProfessor, c.nome AS nomeCurso
-FROM disciplina d
-JOIN professor p ON d.codigoProfessor = p.codigo
-JOIN curso c ON d.codigoCurso = c.codigo;
-
-SELECT d.codigo, d.nome AS nomeDisciplina, d.horasSemanais, p.nome AS nomeProfessor, c.nome AS nomeCurso 
-FROM disciplina d JOIN professor p ON d.codigoProfessor = p.codigo 
-JOIN curso c ON d.codigoCurso = c.codigo
-
-
--- Tabela DisciplinaCurso (relacionamento entre Disciplina e Curso)
-CREATE TABLE disciplinaCurso (
-codigoCurso			INT		NOT NULL, 
-codigoDisciplina	INT		NOT NULL
-PRIMARY KEY (codigoCurso,codigoDisciplina)
-FOREIGN KEY (codigoCurso) REFERENCES curso(codigo),
-FOREIGN KEY (codigoDisciplina) REFERENCES disciplina(codigo),
-)
-GO
-
--- Tabela ConteudoDisciplina
-CREATE TABLE ConteudoDisciplina (
-    codigo				INT		    NOT NULL,
-    codigoDisciplina	INT          NOT NULL,
-    descricao			VARCHAR(255) NOT NULL
-	PRIMARY KEY (codigo)
-    FOREIGN KEY (codigoDisciplina) REFERENCES disciplina(codigo),
+codigo				INT IDENTITY (1001,1)		NOT NULL,
+nome				VARCHAR(100)				NOT NULL,
+horasSemanais		INT							NOT NULL,
+horarioInicio       TIME						NOT NULL,
+semestre			INT							NOT NULL,
+codigoProfessor		INT							NOT NULL,
+codigoCurso		INT							    NOT NULL
+PRIMARY KEY (codigo)
+FOREIGN KEY (codigoProfessor) REFERENCES professor(codigo),
+FOREIGN KEY (codigoCurso) REFERENCES curso(codigo)
 )
 GO
 
 -- Tabela Telefones
-CREATE TABLE telefones (
-    aluno			CHAR(11),
-    telefone		CHAR(12),
-    FOREIGN KEY (aluno) REFERENCES aluno(CPF)
-);
-
--- Tabela Matricula
-CREATE TABLE matricula (
-    codigo				INT			NOT NULL,
-    aluno				CHAR(11)		NOT NULL,
-    codigoCurso			INT		NOT NULL,
-	codigoDisciplina	INT     NOT NULL,
-	dataMatricula		DATE	NOT NULL,
-	situacaoDisciplina	VARCHAR(20)	NOT NULL
-	PRIMARY KEY (codigo)
-    FOREIGN KEY (aluno) REFERENCES Aluno(CPF),
-    FOREIGN KEY (codigoCurso,codigoDisciplina) REFERENCES disciplinaCurso(codigoCurso,codigoDisciplina)
+CREATE TABLE telefone (
+aluno			CHAR(11),
+numero  		CHAR(12)
+PRIMARY KEY (numero)
+FOREIGN KEY (aluno) REFERENCES aluno(CPF)
 )
 GO
 
-INSERT INTO disciplina (nome, horasSemanais, codigoProfessor, codigoCurso)
-VALUES 
-    ('Logica de Programação', 4, 1,2),
-    ('Inglês II', 2, 2, 1),
-    ('Engenharia de Software I', 4, 3, 2),
-    ('Engenharia de Software II', 3, 4, 3),
-    ('Projeto Integrado I', 2, 4, 4),
-    ('Contabilidade', 2, 1, 4),
-    ('Administração Geral', 4, 10, 5),
-    ('Português', 4, 2, 6),
-    ('Educação Física', 3, 8, 7),
-    ('Artes', 2, 9, 9 );
+-- Tabela Matricula
+CREATE TABLE matricula (
+codigo				INT			NOT NULL,
+aluno				CHAR(11)		NOT NULL,
+codigoCurso			INT		NOT NULL,
+codigoDisciplina	INT     NOT NULL,
+dataMatricula		DATE	NOT NULL,
+situacaoDisciplina	VARCHAR(20)	NOT NULL
+PRIMARY KEY (codigo)
+FOREIGN KEY (aluno) REFERENCES Aluno(CPF),
+FOREIGN KEY (codigoCurso,codigoDisciplina) REFERENCES disciplinaCurso(codigoCurso,codigoDisciplina)
+)
+GO
 
-SELECT d.codigo, d.nome AS nomeDisciplina, d.horasSemanais, p.nome AS nomeProfessor, c.nome AS nomeCurso
-FROM disciplina d 
-JOIN professor p ON d.codigoProfessor = p.codigo 
-JOIN curso c ON d.codigoCurso = c.codigo
-WHERE d.codigo = 1008;
-
-
-SELECT * FROM disciplina
-SELECT * FROM professor
-SELECT * FROM curso
+-- Dados para Teste
+INSERT INTO disciplina (nome, horasSemanais, horarioInicio, semestre, codigoProfessor, codigoCurso)
+VALUES
+('MatemÃ¡tica Discreta', 4, '09:00', 1, 1, 1),
+('Estrutura de Dados', 5, '13:30', 1, 4, 2),
+('Banco de Dados', 4, '10:00', 2, 1, 1);
 
 INSERT INTO curso (codigo, nome, cargaHoraria, sigla, ultimaNotaENADE, turno) 
 VALUES 
-(1, 'Administração de Empresas', 4000, 'ADM', 7.8, 'Matutino'),
+(1, 'AdministraÃ§Ã£o de Empresas', 4000, 'ADM', 7.8, 'Matutino'),
 (2, 'Engenharia Civil', 4500, 'ENG CIV', 8.5, 'Vespertino'),
 (3, 'Direito', 4000, 'DIR', 8.2, 'Noturno'),
 (4, 'Medicina', 6000, 'MED', 9.3, 'Integral'),
-(5, 'Ciência da Computação', 3600, 'CC', 8.9, 'Matutino'),
+(5, 'CiÃªncia da ComputaÃ§Ã£o', 3600, 'CC', 8.9, 'Matutino'),
 (6, 'Psicologia', 4200, 'PSI', 8.0, 'Vespertino'),
-(7, 'Administração Pública', 3800, 'ADM PUB', 7.5, 'Noturno'),
-(8, 'Engenharia Elétrica', 4800, 'ENG ELE', 8.7, 'Integral'),
+(7, 'AdministraÃ§Ã£o PÃºblica', 3800, 'ADM PUB', 7.5, 'Noturno'),
+(8, 'Engenharia ElÃ©trica', 4800, 'ENG ELE', 8.7, 'Integral'),
 (9, 'Gastronomia', 3200, 'GAS', 7.0, 'Matutino'),
 (10, 'Arquitetura e Urbanismo', 4200, 'ARQ', 8.4, 'Vespertino');
+
+INSERT INTO professor VALUES
+(1, 'JoÃ£o Silva', 'Doutor'),
+(2, 'Maria Santos', 'Mestre'),
+(3, 'Carlos Oliveira', 'Doutor'),
+(4, 'Ana Costa', 'Mestre'),
+(5, 'Pedro Mendes', 'Doutor'),
+(6, 'Marta Pereira', 'Mestre'),
+(7, 'Ricardo Almeida', 'Doutor'),
+(8, 'Sofia Ramos', 'Mestre'),
+(9, 'LuÃ­s Fernandes', 'Doutor'),
+(10, 'Catarina Sousa', 'Mestre')
+
+SELECT * FROM professor
 
 CREATE VIEW v_listarCurso AS
 SELECT codigo, nome, cargaHoraria, sigla, ultimaNotaENADE, turno FROM curso
@@ -165,21 +132,6 @@ FROM aluno a JOIN curso c ON a.curso = c.codigo
 
 SELECT * FROM v_listarAluno
 
-
-
-INSERT INTO professor VALUES
-(1, 'João Silva', 'Doutor'),
-(2, 'Maria Santos', 'Mestre'),
-(3, 'Carlos Oliveira', 'Doutor'),
-(4, 'Ana Costa', 'Mestre'),
-(5, 'Pedro Mendes', 'Doutor'),
-(6, 'Marta Pereira', 'Mestre'),
-(7, 'Ricardo Almeida', 'Doutor'),
-(8, 'Sofia Ramos', 'Mestre'),
-(9, 'Luís Fernandes', 'Doutor'),
-(10, 'Catarina Sousa', 'Mestre')
-
-SELECT * FROM professor
 
 CREATE PROCEDURE sp_validatitulacao (@titulacao VARCHAR(50), @valido BIT OUTPUT)
 AS
@@ -213,7 +165,7 @@ BEGIN
         END
         ELSE
         BEGIN
-            RAISERROR('Titulação inválida', 16, 1)
+            RAISERROR('TitulaÃ§Ã£o invÃ¡lida', 16, 1)
             RETURN
         END
     END
@@ -226,18 +178,18 @@ BEGIN
         END
         ELSE
         BEGIN
-            RAISERROR('Titulação inválida', 16, 1)
+            RAISERROR('TitulaÃ§Ã£o invÃ¡lida', 16, 1)
             RETURN
         END
     END
     ELSE IF (@acao = 'D')
     BEGIN
         DELETE FROM professor WHERE codigo = @codigo
-        SET @saida = 'Professor excluído com sucesso'
+        SET @saida = 'Professor excluÃ­do com sucesso'
     END
     ELSE
     BEGIN
-        RAISERROR('Operação inválida', 16, 1)
+        RAISERROR('OperaÃ§Ã£o invÃ¡lida', 16, 1)
         RETURN
     END
 END
@@ -262,7 +214,7 @@ AS
 BEGIN
     DECLARE @validoCodigo BIT
 
-    -- Verificar se o código é válido
+    -- Verificar se o cÃ³digo Ã© vÃ¡lido
     IF (@codigo >= 0 AND @codigo <= 100)
     BEGIN
         SET @validoCodigo = 1
@@ -283,7 +235,7 @@ BEGIN
         END
         ELSE
         BEGIN
-            RAISERROR('Código de curso inválido', 16, 1)
+            RAISERROR('CÃ³digo de curso invÃ¡lido', 16, 1)
             RETURN
         END
     END
@@ -299,7 +251,7 @@ BEGIN
         END
         ELSE
         BEGIN
-            RAISERROR('Código de curso inválido', 16, 1)
+            RAISERROR('CÃ³digo de curso invÃ¡lido', 16, 1)
             RETURN
         END
     END
@@ -309,12 +261,12 @@ BEGIN
         -- Verificar se existem disciplinas associadas a este curso
         IF EXISTS (SELECT 1 FROM disciplina WHERE codigoCurso = @codigo)
         BEGIN
-            SET @saida = 'Não é possível excluir o curso pois existem disciplinas associadas a ele.';
+            SET @saida = 'NÃ£o Ã© possÃ­vel excluir o curso pois existem disciplinas associadas a ele.';
             RETURN;
         END;
 
         DELETE FROM curso WHERE codigo = @codigo;
-        SET @saida = 'Curso excluído com sucesso.';
+        SET @saida = 'Curso excluÃ­do com sucesso.';
     END
 END
 END
@@ -322,9 +274,8 @@ END
 SELECT * FROM curso
 
 DECLARE @out1 VARCHAR(100);
-EXEC sp_iud_curso 'D', 1, 'Curso Teste', 400, 'CT', 8.5, 'Manhã', @out1 OUTPUT;
+EXEC sp_iud_curso 'D', 1, 'Curso Teste', 400, 'CT', 8.5, 'ManhÃ£', @out1 OUTPUT;
 PRINT @out1;
-
 
 
 
@@ -340,12 +291,12 @@ BEGIN
     DECLARE @soma INT;
     DECLARE @resto INT;
 
-    SET @valido = 0; -- Inicializa como inválido por padrão
+    SET @valido = 0; -- Inicializa como invÃ¡lido por padrÃ£o
 
-    -- Verificação se o CPF contém apenas dígitos numéricos
+    -- VerificaÃ§Ã£o se o CPF contÃ©m apenas dÃ­gitos numÃ©ricos
     IF @CPF NOT LIKE '%[^0-9]%' AND @CPF NOT IN ('00000000000', '11111111111', '22222222222', '33333333333', '44444444444', '55555555555', '66666666666', '77777777777', '88888888888', '99999999999')
     BEGIN
-        -- Cálculo do primeiro dígito verificador
+        -- CÃ¡lculo do primeiro dÃ­gito verificador
         SET @soma = 0;
         SET @i = 10;
         WHILE @i >= 2
@@ -356,7 +307,7 @@ BEGIN
         SET @resto = @soma % 11;
         SET @primeiroDigito = IIF(@resto < 2, 0, 11 - @resto);
 
-        -- Cálculo do segundo dígito verificador
+        -- CÃ¡lculo do segundo dÃ­gito verificador
         SET @soma = 0;
         SET @i = 11;
         SET @CPF = @CPF + CAST(@primeiroDigito AS NVARCHAR(1));
@@ -368,10 +319,10 @@ BEGIN
         SET @resto = @soma % 11;
         SET @segundoDigito = IIF(@resto < 2, 0, 11 - @resto);
 
-        -- Verificação dos dígitos verificadores
+        -- VerificaÃ§Ã£o dos dÃ­gitos verificadores
         IF LEN(@CPF) = 11 AND SUBSTRING(@CPF, 10, 1) = CAST(@primeiroDigito AS NVARCHAR(1)) AND SUBSTRING(@CPF, 11, 1) = CAST(@segundoDigito AS NVARCHAR(1))
         BEGIN
-            SET @valido = 1; -- CPF válido
+            SET @valido = 1; -- CPF vÃ¡lido
         END;
     END;
 END;
@@ -385,11 +336,11 @@ BEGIN
 
     IF DATEDIFF(YEAR, @dataNascimento, GETDATE()) < 16 
     BEGIN
-        SET @valido = 0; -- Idade inválida
+        SET @valido = 0; -- Idade invÃ¡lida
     END
     ELSE
     BEGIN
-        SET @valido = 1; -- Idade válida
+        SET @valido = 1; -- Idade vÃ¡lida
     END;
 END;
 
@@ -411,29 +362,29 @@ BEGIN
     SET @RA = CAST(@AnoIngresso AS VARCHAR(4)) + CAST(@SemestreIngresso AS VARCHAR(2)) + RIGHT('0000' + CAST(CAST(RAND() * 10000 AS INT) AS VARCHAR), 4);
 END;
 
--- Teste Validação CPF
+-- Teste ValidaÃ§Ã£o CPF
 DECLARE @CPF CHAR(11) = '38941111111'; -- Substitua pelo CPF desejado
 DECLARE @valido BIT;
 EXEC sp_validaCPF @CPF, @valido OUTPUT;
 IF @valido = 1
-    PRINT 'CPF válido'
+    PRINT 'CPF vÃ¡lido'
 ELSE
-    PRINT 'CPF inválido'
+    PRINT 'CPF invÃ¡lido'
 
 -- Teste Procedure Idade 
 DECLARE @dataNascimento DATE = '01-01-2010'; -- Substitua pela data de nascimento desejada
 DECLARE @valido BIT;
 EXEC sp_ValidarIdade @dataNascimento, @valido OUTPUT;
 IF @valido = 1
-    PRINT 'Idade válida (igual ou superior a 16 anos)'
+    PRINT 'Idade vÃ¡lida (igual ou superior a 16 anos)'
 ELSE
-    PRINT 'Idade inválida (inferior a 16 anos)'
+    PRINT 'Idade invÃ¡lida (inferior a 16 anos)'
 
--- Teste Procedure Limite Graduação
+-- Teste Procedure Limite GraduaÃ§Ã£o
 DECLARE @anoIngresso INT = 2024; 
 DECLARE @dataLimiteGraduacao DATE;
 EXEC sp_CalcularDataLimiteGraduacao @anoIngresso, @dataLimiteGraduacao OUTPUT;
-PRINT 'Data limite de graduação: ' + CONVERT(VARCHAR, @dataLimiteGraduacao, 103);
+PRINT 'Data limite de graduaÃ§Ã£o: ' + CONVERT(VARCHAR, @dataLimiteGraduacao, 103);
 
 -- Teste Procedure Gerar RA
 DECLARE @AnoIngresso INT = 2024;
@@ -474,7 +425,7 @@ BEGIN
 
     IF @validoCPF = 0
     BEGIN
-        SET @saida = 'CPF inválido.';
+        SET @saida = 'CPF invÃ¡lido.';
         RETURN;
     END;
 
@@ -483,11 +434,11 @@ BEGIN
 
     IF @validoIdade = 0
     BEGIN
-        SET @saida = 'Idade inválida para ingresso.';
+        SET @saida = 'Idade invÃ¡lida para ingresso.';
         RETURN;
     END;
 
-    -- Calcular data limite de graduação
+    -- Calcular data limite de graduaÃ§Ã£o
     EXEC sp_CalcularDataLimiteGraduacao @anoIngresso, @semestreAnoLimiteGraduacao OUTPUT;
 
     -- Gerar RA
@@ -523,7 +474,7 @@ BEGIN
     END
     ELSE
     BEGIN
-        SET @saida = 'Operação inválida.';
+        SET @saida = 'OperaÃ§Ã£o invÃ¡lida.';
         RETURN;
     END;
 END;
@@ -547,6 +498,8 @@ CREATE PROCEDURE sp_iud_disciplina
     @codigo INT, 
     @nome VARCHAR(100), 
     @horasSemanais INT,
+    @horarioInicio TIME,
+    @semestre INT,
     @codigoProfessor INT,
     @codigoCurso INT,
     @saida VARCHAR(100) OUTPUT
@@ -554,31 +507,32 @@ AS
 BEGIN
     IF (@acao = 'I')
     BEGIN
-        INSERT INTO disciplina (nome, horasSemanais, codigoProfessor, codigoCurso) 
-        VALUES (@nome, @horasSemanais, @codigoProfessor, @codigoCurso)
+        INSERT INTO disciplina (nome, horasSemanais, horarioInicio, semestre, codigoProfessor, codigoCurso) 
+        VALUES (@nome, @horasSemanais, @horarioInicio, @semestre, @codigoProfessor, @codigoCurso)
         SET @saida = 'Disciplina inserida com sucesso'
     END
     ELSE IF (@acao = 'U')
     BEGIN
         UPDATE disciplina 
-        SET nome = @nome, horasSemanais = @horasSemanais, codigoProfessor = @codigoProfessor, codigoCurso = @codigoCurso
+        SET nome = @nome, horasSemanais = @horasSemanais, horarioInicio = @horarioInicio, semestre = @semestre, codigoProfessor = @codigoProfessor, codigoCurso = @codigoCurso
         WHERE codigo = @codigo
         SET @saida = 'Disciplina alterada com sucesso'
     END
     ELSE IF (@acao = 'D')
     BEGIN
         DELETE FROM disciplina WHERE codigo = @codigo
-        SET @saida = 'Disciplina excluída com sucesso'
+        SET @saida = 'Disciplina excluÃ­da com sucesso'
     END
     ELSE
     BEGIN
-        RAISERROR('Operação inválida', 16, 1)
+        RAISERROR('OperaÃ§Ã£o invÃ¡lida', 16, 1)
         RETURN
     END
 END
 
+
 DECLARE @out1 VARCHAR(100)
-EXEC sp_iud_disciplina 'D', 1013, 'Nome da Disciplina', 4, 1, 7, @out1 OUTPUT
+EXEC sp_iud_disciplina 'I', 1013, 'Nome da Disciplina', 4, '13:00', 2, 1, 7, @out1 OUTPUT
 PRINT @out1
 
 SELECT * FROM disciplina
