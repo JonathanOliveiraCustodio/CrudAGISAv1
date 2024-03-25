@@ -1,0 +1,118 @@
+package persistence;
+
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
+
+import model.Curso;
+import model.Disciplina;
+import model.Professor;
+
+public class DisciplinaDao implements ICrud<Disciplina>, IDisciplinaDao {
+
+	private GenericDao gDao;
+
+	public DisciplinaDao(GenericDao gDao) {
+		this.gDao = gDao;
+	}
+
+	@Override
+	public Disciplina consultar(Disciplina d) throws SQLException, ClassNotFoundException {
+	    Connection con = gDao.getConnection();
+	    StringBuffer sql = new StringBuffer();
+	    sql.append("SELECT d.codigo AS codigoDisciplina, d.nome AS nomeDisciplina, d.horasSemanais, ");
+	    sql.append("p.codigo AS codigoProfessor, p.nome AS nomeProfessor, ");
+	    sql.append("c.codigo AS codigoCurso, c.nome AS nomeCurso ");
+	    sql.append("FROM disciplina d ");
+	    sql.append("JOIN professor p ON d.codigoProfessor = p.codigo ");
+	    sql.append("JOIN curso c ON d.codigoCurso = c.codigo ");
+	    sql.append("WHERE d.codigo = ?");
+
+	    PreparedStatement ps = con.prepareStatement(sql.toString());
+	    ps.setInt(1, d.getCodigo());
+	    ResultSet rs = ps.executeQuery();
+	    if (rs.next()) {
+	        Professor p = new Professor();
+	        p.setCodigo(rs.getInt("codigoProfessor"));
+	        p.setNome(rs.getString("nomeProfessor"));
+
+	        Curso c = new Curso();
+	        c.setCodigo(rs.getInt("codigoCurso"));
+	        c.setNome(rs.getString("nomeCurso"));
+
+	        d.setCodigo(rs.getInt("codigoDisciplina"));
+	        d.setNome(rs.getString("nomeDisciplina"));
+	        d.setHorasSemanais(rs.getInt("horasSemanais"));
+	        d.setProfessor(p);
+	        d.setCurso(c);
+	    }
+	    rs.close();
+	    ps.close();
+	    con.close();
+
+	    return d;
+	}
+
+	@Override
+	public List<Disciplina> listar() throws SQLException, ClassNotFoundException {
+
+		List<Disciplina> disciplinas = new ArrayList<>();
+		Connection con = gDao.getConnection();
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT d.codigo, d.nome AS nomeDisciplina, d.horasSemanais, p.nome AS nomeProfessor, c.nome AS nomeCurso ");
+		sql.append("FROM disciplina d JOIN professor p ON d.codigoProfessor = p.codigo ");
+		sql.append("JOIN curso c ON d.codigoCurso = c.codigo ");
+
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		ResultSet rs = ps.executeQuery();
+
+		while (rs.next()) {
+
+			Professor p = new Professor();
+			p.setNome(rs.getString("nomeProfessor"));
+
+			Curso c = new Curso();
+			c.setNome(rs.getString("nomeCurso"));
+
+			Disciplina d = new Disciplina();
+			d.setCodigo(rs.getInt("codigo"));
+			d.setNome(rs.getString("nomeDisciplina"));
+			d.setHorasSemanais(rs.getInt("horasSemanais"));
+			d.setProfessor(p);
+			d.setCurso(c);
+
+			disciplinas.add(d);
+		}
+		rs.close();
+		ps.close();
+		con.close();
+
+		return disciplinas;
+	}
+
+	@Override
+	public String iudDisciplina(String acao, Disciplina d) throws SQLException, ClassNotFoundException {
+		Connection c = gDao.getConnection();
+		String sql = "{CALL sp_iud_disciplina (?,?,?,?,?,?,?)}";
+		CallableStatement cs = c.prepareCall(sql);
+		cs.setString(1, acao);
+		cs.setInt(2, d.getCodigo());
+		cs.setString(3, d.getNome());
+		cs.setInt(4, d.getHorasSemanais());
+		cs.setInt(5, d.getProfessor().getCodigo());
+		cs.setInt(6, d.getCurso().getCodigo());
+		cs.registerOutParameter(7, Types.VARCHAR);
+		cs.execute();
+		String saida = cs.getString(7);
+		cs.close();
+		c.close();
+
+		return saida;
+	}
+
+}
