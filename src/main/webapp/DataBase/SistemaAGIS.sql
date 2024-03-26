@@ -1,8 +1,20 @@
 USE master
 CREATE DATABASE SistemaAGIS
 --DROP DATABASE SistemaAGIS 
-
+GO
 USE SistemaAGIS 
+GO
+-- Tabela Curso
+CREATE TABLE curso (
+codigo					INT CHECK (codigo >= 0 AND codigo <= 100)		NOT NULL,
+nome					VARCHAR(100)									NOT NULL,
+cargaHoraria			INT												NOT NULL,			
+sigla					VARCHAR(10)										NOT NULL,
+ultimaNotaENADE			DECIMAL(5,2)									NOT NULL,
+turno					VARCHAR(20)										NOT NULL
+PRIMARY KEY  (codigo)
+)
+GO
 
 CREATE TABLE aluno (
     CPF							CHAR(11) UNIQUE,
@@ -34,18 +46,6 @@ PRIMARY KEY (codigo)
 )
 GO
 
--- Tabela Curso
-CREATE TABLE curso (
-codigo					INT CHECK (codigo >= 0 AND codigo <= 100)		NOT NULL,
-nome					VARCHAR(100)									NOT NULL,
-cargaHoraria			INT												NOT NULL,			
-sigla					VARCHAR(10)										NOT NULL,
-ultimaNotaENADE			DECIMAL(5,2)									NOT NULL,
-turno					VARCHAR(20)										NOT NULL
-PRIMARY KEY  (codigo)
-)
-GO
-
 -- Tabela Disciplina
 CREATE TABLE disciplina (
 codigo				INT IDENTITY (1001,1)		NOT NULL,
@@ -53,6 +53,7 @@ nome				VARCHAR(100)				NOT NULL,
 horasSemanais		INT							NOT NULL,
 horarioInicio       TIME						NOT NULL,
 semestre			INT							NOT NULL,
+diaSemana			VARCHAR(20)					NOT NULL,
 codigoProfessor		INT							NOT NULL,
 codigoCurso		INT							    NOT NULL
 PRIMARY KEY (codigo)
@@ -80,16 +81,10 @@ dataMatricula		DATE	NOT NULL,
 situacaoDisciplina	VARCHAR(20)	NOT NULL
 PRIMARY KEY (codigo)
 FOREIGN KEY (aluno) REFERENCES Aluno(CPF),
-FOREIGN KEY (codigoCurso,codigoDisciplina) REFERENCES disciplinaCurso(codigoCurso,codigoDisciplina)
+FOREIGN KEY (codigoDisciplina) REFERENCES disciplina(codigo)
 )
 GO
 
--- Dados para Teste
-INSERT INTO disciplina (nome, horasSemanais, horarioInicio, semestre, codigoProfessor, codigoCurso)
-VALUES
-('Matemática Discreta', 4, '09:00', 1, 1, 1),
-('Estrutura de Dados', 5, '13:30', 1, 4, 2),
-('Banco de Dados', 4, '10:00', 2, 1, 1);
 
 INSERT INTO curso (codigo, nome, cargaHoraria, sigla, ultimaNotaENADE, turno) 
 VALUES 
@@ -116,12 +111,24 @@ INSERT INTO professor VALUES
 (9, 'Luís Fernandes', 'Doutor'),
 (10, 'Catarina Sousa', 'Mestre')
 
-SELECT * FROM professor
+INSERT INTO disciplina (nome, horasSemanais, horarioInicio, semestre, diaSemana, codigoProfessor, codigoCurso)
+VALUES
+('Matemática', 4, '08:00:00', 1, 'Segunda-feira', 1, 10),
+('Física', 3, '10:00:00', 1, 'Terça-feira', 1, 8),
+('Química', 3, '13:00:00', 2, 'Quarta-feira', 3, 6),
+('Biologia', 2, '09:00:00', 2, 'Quinta-feira', 4, 1),
+('História', 2, '11:00:00', 1, 'Sexta-feira', 5, 1);
+
+INSERT INTO aluno (CPF, nome, nomeSocial, dataNascimento, telefoneContato, emailPessoal, emailCorporativo, dataConclusao2Grau, instituicaoConclusao2Grau, pontuacaoVestibular, posicaoVestibular, anoIngresso, semestreIngresso, semestreAnoLimiteGraduacao, RA, curso)
+VALUES
+(12345678910, 'Fulano da Silva', NULL, '1990-05-15', '123456789', 'fulano@gmail.com', 'fulano@empresa.com', '2008-12-31', 'Escola X', 85.50, 10, 2010, 1, '2020-06-30', 123456789, 5),
+(98765432198, 'Ciclano Oliveira', NULL, '1992-09-20', '987654321', 'ciclano@yahoo.com', 'ciclano@empresa.com', '2009-06-30', 'Colégio Y', 92.75, 5, 2011, 2, '2021-12-31', 987654321, 4),
+(11122233344, 'Beltrano Pereira', NULL, '1995-03-10', '111222333', 'beltrano@hotmail.com', 'beltrano@empresa.com', '2010-05-20', 'Instituto Z', 78.25, 20, 2012, 1, '2022-06-30', 111222333, 3),
+(55566677788, 'Maria Santos', NULL, '1993-11-08', '555666777', 'maria_santos@gmail.com', 'maria@empresa.com', '2009-10-15', 'Escola W', 89.00, 7, 2013, 2, '2023-12-31', 555666777, 2),
+(99988877766, 'João Oliveira', NULL, '1994-07-25', '999888777', 'joao.oliveira@yahoo.com', 'joao@empresa.com', '2011-04-30', 'Colégio V', 94.25, 3, 2014, 1, '2024-06-30', 999888777, 1);
 
 CREATE VIEW v_listarCurso AS
 SELECT codigo, nome, cargaHoraria, sigla, ultimaNotaENADE, turno FROM curso
-
-SELECT * FROM v_listarCurso
 
 CREATE VIEW v_listarAluno AS
 SELECT a.CPF, a.nome, a.nomeSocial, a.dataNascimento, a.telefoneContato,
@@ -129,8 +136,6 @@ a.emailPessoal, a.emailCorporativo, a.dataConclusao2Grau, a.instituicaoConclusao
 a.pontuacaoVestibular, a.posicaoVestibular, a.anoIngresso, a.semestreIngresso, 
 a.semestreAnoLimiteGraduacao, a.RA, c.codigo AS codigoCurso, c.nome AS nomeCurso
 FROM aluno a JOIN curso c ON a.curso = c.codigo
-
-SELECT * FROM v_listarAluno
 
 
 CREATE PROCEDURE sp_validatitulacao (@titulacao VARCHAR(50), @valido BIT OUTPUT)
@@ -153,9 +158,7 @@ CREATE PROCEDURE sp_iud_professor
 AS
 BEGIN
     DECLARE @tit_valido BIT
-
     EXEC sp_validatitulacao @titulacao, @tit_valido OUTPUT
-
     IF (@acao = 'I')
     BEGIN
         IF @tit_valido = 1
@@ -271,7 +274,6 @@ BEGIN
 END
 END
 
-SELECT * FROM curso
 
 DECLARE @out1 VARCHAR(100);
 EXEC sp_iud_curso 'D', 1, 'Curso Teste', 400, 'CT', 8.5, 'Manhã', @out1 OUTPUT;
@@ -362,39 +364,6 @@ BEGIN
     SET @RA = CAST(@AnoIngresso AS VARCHAR(4)) + CAST(@SemestreIngresso AS VARCHAR(2)) + RIGHT('0000' + CAST(CAST(RAND() * 10000 AS INT) AS VARCHAR), 4);
 END;
 
--- Teste Validação CPF
-DECLARE @CPF CHAR(11) = '38941111111'; -- Substitua pelo CPF desejado
-DECLARE @valido BIT;
-EXEC sp_validaCPF @CPF, @valido OUTPUT;
-IF @valido = 1
-    PRINT 'CPF válido'
-ELSE
-    PRINT 'CPF inválido'
-
--- Teste Procedure Idade 
-DECLARE @dataNascimento DATE = '01-01-2010'; -- Substitua pela data de nascimento desejada
-DECLARE @valido BIT;
-EXEC sp_ValidarIdade @dataNascimento, @valido OUTPUT;
-IF @valido = 1
-    PRINT 'Idade válida (igual ou superior a 16 anos)'
-ELSE
-    PRINT 'Idade inválida (inferior a 16 anos)'
-
--- Teste Procedure Limite Graduação
-DECLARE @anoIngresso INT = 2024; 
-DECLARE @dataLimiteGraduacao DATE;
-EXEC sp_CalcularDataLimiteGraduacao @anoIngresso, @dataLimiteGraduacao OUTPUT;
-PRINT 'Data limite de graduação: ' + CONVERT(VARCHAR, @dataLimiteGraduacao, 103);
-
--- Teste Procedure Gerar RA
-DECLARE @AnoIngresso INT = 2024;
-DECLARE @SemestreIngresso INT = 1;
-DECLARE @RA VARCHAR(10);
-
-EXEC sp_GerarRA @AnoIngresso, @SemestreIngresso, @RA OUTPUT;
-
-PRINT 'RA gerado: ' + @RA;
-
 -- Procedure para Inserir, Atualizar ou Deletar Aluno
 CREATE PROCEDURE sp_iud_aluno 
     @acao CHAR(1), 
@@ -428,7 +397,6 @@ BEGIN
         SET @saida = 'CPF inválido.';
         RETURN;
     END;
-
     -- Validar Idade
     EXEC sp_ValidarIdade @dataNascimento, @validoIdade OUTPUT;
 
@@ -437,13 +405,10 @@ BEGIN
         SET @saida = 'Idade inválida para ingresso.';
         RETURN;
     END;
-
     -- Calcular data limite de graduação
     EXEC sp_CalcularDataLimiteGraduacao @anoIngresso, @semestreAnoLimiteGraduacao OUTPUT;
-
     -- Gerar RA
     EXEC sp_GerarRA @anoIngresso, @semestreIngresso, @RA OUTPUT;
-
     -- Inserir, atualizar ou deletar aluno
     IF (UPPER(@acao) = 'I')
     BEGIN
@@ -487,12 +452,6 @@ EXEC sp_iud_aluno 'U', '38942231896', 'Jonathan', 'fulano social', '1990-07-31',
 
 PRINT @saida;
 
-SELECT * FROM aluno
-SELECT * FROM disciplina
-
-SELECT d.codigo AS codDisc, d.nome AS nomeDisc, d.horasSemanais, p.codigo AS codProf,p.nome AS nomeProf, p.titulacao AS titProf  
-FROM disciplina d INNER JOIN professor p ON d.codigoProfessor = p.codigo 
-
 CREATE PROCEDURE sp_iud_disciplina 
     @acao CHAR(1), 
     @codigo INT, 
@@ -500,6 +459,7 @@ CREATE PROCEDURE sp_iud_disciplina
     @horasSemanais INT,
     @horarioInicio TIME,
     @semestre INT,
+	@diaSemana VARCHAR(20),
     @codigoProfessor INT,
     @codigoCurso INT,
     @saida VARCHAR(100) OUTPUT
@@ -507,14 +467,14 @@ AS
 BEGIN
     IF (@acao = 'I')
     BEGIN
-        INSERT INTO disciplina (nome, horasSemanais, horarioInicio, semestre, codigoProfessor, codigoCurso) 
-        VALUES (@nome, @horasSemanais, @horarioInicio, @semestre, @codigoProfessor, @codigoCurso)
+        INSERT INTO disciplina (nome, horasSemanais, horarioInicio, semestre, diaSemana, codigoProfessor, codigoCurso) 
+        VALUES (@nome, @horasSemanais, @horarioInicio, @semestre, @diaSemana, @codigoProfessor, @codigoCurso)
         SET @saida = 'Disciplina inserida com sucesso'
     END
     ELSE IF (@acao = 'U')
     BEGIN
         UPDATE disciplina 
-        SET nome = @nome, horasSemanais = @horasSemanais, horarioInicio = @horarioInicio, semestre = @semestre, codigoProfessor = @codigoProfessor, codigoCurso = @codigoCurso
+        SET nome = @nome, horasSemanais = @horasSemanais, horarioInicio = @horarioInicio, semestre = @semestre, diaSemana = @diaSemana, codigoProfessor = @codigoProfessor, codigoCurso = @codigoCurso
         WHERE codigo = @codigo
         SET @saida = 'Disciplina alterada com sucesso'
     END
@@ -532,7 +492,5 @@ END
 
 
 DECLARE @out1 VARCHAR(100)
-EXEC sp_iud_disciplina 'I', 1013, 'Nome da Disciplina', 4, '13:00', 2, 1, 7, @out1 OUTPUT
+EXEC sp_iud_disciplina 'I', 1013, 'Nome da Disciplina', 4, '13:00', 2,'Segunda-Feira', 1, 7, @out1 OUTPUT
 PRINT @out1
-
-SELECT * FROM disciplina

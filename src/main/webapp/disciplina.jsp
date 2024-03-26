@@ -43,6 +43,30 @@
 						placeholder="Horas Semanais"
 						value='<c:out value="${disciplina.horasSemanais }"></c:out>'></td>
 				</tr>
+				
+				<tr>
+					<td colspan="4"><label for="data">Hora Inicio:</label> <input
+						class="input_data_id" type="number" min="0" max="23" step="1"
+						id="horaInicio" name="horaInicio"
+						placeholder="Hora Inicio"
+						value='<c:out value="${disciplina.horaInicio }"></c:out>'></td>
+				</tr>
+				
+				<tr>
+					<td colspan="4"><label for="data">Semestre:</label> <input
+						class="input_data_id" type="number" min="0" max="23" step="1"
+						id="semestre" name="semestre"
+						placeholder="Semestre"
+						value='<c:out value="${disciplina.semestre }"></c:out>'></td>
+				</tr>
+				
+				<tr>
+					<td colspan="4"><label for="data">Dia da Semana:</label> <input
+						class="input_data" type="text" id="diaSemana" name="diaSemana"
+						placeholder="Dia da Semana"
+						value='<c:out value="${disciplina.diaSemana }"></c:out>'></td>
+				</tr>
+				
 
 				<tr>
 					<td colspan="4"><label for="data">Professor:</label><select
@@ -123,6 +147,9 @@
 								<th>Código</th>
 								<th>Nome</th>
 								<th>Hora Semanais</th>
+								<th>Hora Inicio</th>
+								<th>Semestre</th>
+								<th>Dia Semana</th>								
 								<th>Professor</th>
 								<th>Curso</th>
 
@@ -134,6 +161,9 @@
 									<td><c:out value="${d.codigo}" /></td>
 									<td><c:out value="${d.nome}" /></td>
 									<td><c:out value="${d.horasSemanais}" /></td>
+									<td><c:out value="${d.horaInicio}" /></td>
+									<td><c:out value="${d.semestre}" /></td>
+									<td><c:out value="${d.diaSemana}" /></td>							
 									<td><c:out value="${d.professor.nome}" /></td>
 									<td><c:out value="${d.curso.nome}" /></td>
 								</tr>
