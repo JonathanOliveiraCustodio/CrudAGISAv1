@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+	<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -45,10 +46,9 @@
 				</tr>
 				
 				<tr>
-					<td colspan="4"><label for="data">Hora Inicio:</label> <input
-						class="input_data_id" type="number" min="0" max="23" step="1"
-						id="horaInicio" name="horaInicio"
-						placeholder="Hora Inicio"
+					<td colspan="4"><label for="data">Horario Inicio :</label> <input
+						class="input_data" type="text" id="horarioInicio" name="horarioInicio"
+						placeholder="Nome"
 						value='<c:out value="${disciplina.horaInicio }"></c:out>'></td>
 				</tr>
 				
@@ -163,7 +163,8 @@
 									<td><c:out value="${d.horasSemanais}" /></td>
 									<td><c:out value="${d.horaInicio}" /></td>
 									<td><c:out value="${d.semestre}" /></td>
-									<td><c:out value="${d.diaSemana}" /></td>							
+									<td><c:out value="${d.diaSemana}" /></td>
+									
 									<td><c:out value="${d.professor.nome}" /></td>
 									<td><c:out value="${d.curso.nome}" /></td>
 								</tr>

@@ -26,7 +26,7 @@ public class DisciplinaDao implements ICrud<Disciplina>, IDisciplinaDao {
 	    Connection con = gDao.getConnection();
 	    StringBuffer sql = new StringBuffer();
 	    sql.append("SELECT d.codigo AS codigoDisciplina, d.nome AS nomeDisciplina, d.horasSemanais, ");
-	    sql.append("p.codigo AS codigoProfessor, p.nome AS nomeProfessor, ");
+	    sql.append("d.horarioInicio, d.semestre, d.diaSemana, p.codigo AS codigoProfessor, p.nome AS nomeProfessor, ");
 	    sql.append("c.codigo AS codigoCurso, c.nome AS nomeCurso ");
 	    sql.append("FROM disciplina d ");
 	    sql.append("JOIN professor p ON d.codigoProfessor = p.codigo ");
@@ -48,6 +48,9 @@ public class DisciplinaDao implements ICrud<Disciplina>, IDisciplinaDao {
 	        d.setCodigo(rs.getInt("codigoDisciplina"));
 	        d.setNome(rs.getString("nomeDisciplina"));
 	        d.setHorasSemanais(rs.getInt("horasSemanais"));
+	        d.setHoraInicio(rs.getTime("horarioInicio"));		
+			d.setSemestre(rs.getInt("semestre"));
+			d.setDiaSemana(rs.getString("diaSemana"));
 	        d.setProfessor(p);
 	        d.setCurso(c);
 	    }
@@ -64,7 +67,7 @@ public class DisciplinaDao implements ICrud<Disciplina>, IDisciplinaDao {
 		List<Disciplina> disciplinas = new ArrayList<>();
 		Connection con = gDao.getConnection();
 		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT d.codigo, d.nome AS nomeDisciplina, d.horasSemanais, p.nome AS nomeProfessor, c.nome AS nomeCurso ");
+		sql.append("SELECT d.codigo, d.nome AS nomeDisciplina, d.horasSemanais, d.horarioInicio, d.semestre, d.diaSemana, p.nome AS nomeProfessor, c.nome AS nomeCurso ");
 		sql.append("FROM disciplina d JOIN professor p ON d.codigoProfessor = p.codigo ");
 		sql.append("JOIN curso c ON d.codigoCurso = c.codigo ");
 
@@ -83,9 +86,11 @@ public class DisciplinaDao implements ICrud<Disciplina>, IDisciplinaDao {
 			d.setCodigo(rs.getInt("codigo"));
 			d.setNome(rs.getString("nomeDisciplina"));
 			d.setHorasSemanais(rs.getInt("horasSemanais"));
+			d.setHoraInicio(rs.getTime("horarioInicio"));		
+			d.setSemestre(rs.getInt("semestre"));
+			d.setDiaSemana(rs.getString("diaSemana"));
 			d.setProfessor(p);
-			d.setCurso(c);
-
+			d.setCurso(c);			
 			disciplinas.add(d);
 		}
 		rs.close();
@@ -98,17 +103,20 @@ public class DisciplinaDao implements ICrud<Disciplina>, IDisciplinaDao {
 	@Override
 	public String iudDisciplina(String acao, Disciplina d) throws SQLException, ClassNotFoundException {
 		Connection c = gDao.getConnection();
-		String sql = "{CALL sp_iud_disciplina (?,?,?,?,?,?,?)}";
+		String sql = "{CALL sp_iud_disciplina (?,?,?,?,?,?,?,?,?,?)}";
 		CallableStatement cs = c.prepareCall(sql);
 		cs.setString(1, acao);
 		cs.setInt(2, d.getCodigo());
 		cs.setString(3, d.getNome());
-		cs.setInt(4, d.getHorasSemanais());
-		cs.setInt(5, d.getProfessor().getCodigo());
-		cs.setInt(6, d.getCurso().getCodigo());
-		cs.registerOutParameter(7, Types.VARCHAR);
+		cs.setInt(4, d.getHorasSemanais());	
+		cs.setTime(5, d.getHoraInicio());
+		cs.setInt(6, d.getSemestre());
+		cs.setString(7, d.getDiaSemana());		
+		cs.setInt(8, d.getProfessor().getCodigo());
+		cs.setInt(9, d.getCurso().getCodigo());
+		cs.registerOutParameter(10, Types.VARCHAR);
 		cs.execute();
-		String saida = cs.getString(7);
+		String saida = cs.getString(10);
 		cs.close();
 		c.close();
 

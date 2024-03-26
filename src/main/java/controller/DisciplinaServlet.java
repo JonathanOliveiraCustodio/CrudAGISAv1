@@ -13,9 +13,9 @@ import persistence.CursoDao;
 import persistence.DisciplinaDao;
 import persistence.GenericDao;
 import persistence.ProfessorDao;
-
 import java.io.IOException;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,11 +68,13 @@ public class DisciplinaServlet extends HttpServlet {
 		String cmd = request.getParameter("botao");
 		String codigo = request.getParameter("codigo");
 		String nome = request.getParameter("nome");
-		String horasSemanais = request.getParameter("horasSemanais");
+		String horasSemanais = request.getParameter("horasSemanais");		
+		String horarioInicio = request.getParameter("horarioInicio");
+		String semestre = request.getParameter("semestre");
+		String diaSemana = request.getParameter("diaSemana");
 		String professor = request.getParameter("professor");
 		String curso = request.getParameter("curso");
 	
-		
 
 		// saida
 		String saida = "";
@@ -96,7 +98,10 @@ public class DisciplinaServlet extends HttpServlet {
 		  
 		    	d.setNome(nome);
 		    	d.setHorasSemanais(Integer.parseInt(horasSemanais));
-				
+		    	d.setHoraInicio(Time.valueOf(horarioInicio));
+		    	d.setSemestre(Integer.parseInt(semestre));
+		    	d.setDiaSemana(diaSemana);
+		    	
 		    	Professor p = new Professor();
 				p.setCodigo(Integer.parseInt(professor));
 				p = buscarProfessor(p);
