@@ -37,6 +37,7 @@ public class DisciplinaDao implements ICrud<Disciplina>, IDisciplinaDao {
 	    ps.setInt(1, d.getCodigo());
 	    ResultSet rs = ps.executeQuery();
 	    if (rs.next()) {
+	    	
 	        Professor p = new Professor();
 	        p.setCodigo(rs.getInt("codigoProfessor"));
 	        p.setNome(rs.getString("nomeProfessor"));

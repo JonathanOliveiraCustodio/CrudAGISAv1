@@ -23,7 +23,7 @@ public class Disciplina {
 
 	@Override
 	public String toString() {
-		return codigo + " - " + nome + " - " + professor;
+		return nome;
 	} 
 
 }

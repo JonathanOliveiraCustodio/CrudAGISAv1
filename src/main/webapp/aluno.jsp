@@ -149,11 +149,6 @@
 						</c:forEach>
 				</select></td>
 			</tr>	
-
-				
-
-
-
 				<tr>
 					<td><input type="submit" id="botao" name="botao"
 						value="Cadastrar"></td>
@@ -161,10 +156,8 @@
 						value="Alterar"></td>
 					<td><input type="submit" id="botao" name="botao"
 						value="Excluir"></td>
-
 					<td><input type="submit" id="botao" name="botao"
 						value="Listar"></td>
-
 				</tr>
 			</table>
 			

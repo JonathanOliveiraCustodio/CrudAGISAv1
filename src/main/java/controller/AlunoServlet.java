@@ -174,10 +174,10 @@ public class AlunoServlet extends HttpServlet {
 
 	}
 
-	private String excluirAluno(Aluno p) throws SQLException, ClassNotFoundException {
+	private String excluirAluno(Aluno a) throws SQLException, ClassNotFoundException {
 		GenericDao gDao = new GenericDao();
 		AlunoDao pDao = new AlunoDao(gDao);
-		String saida = pDao.iudAluno("D", p);
+		String saida = pDao.iudAluno("D", a);
 		return saida;
 
 	}

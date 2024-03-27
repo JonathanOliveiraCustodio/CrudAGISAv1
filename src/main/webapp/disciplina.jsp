@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-	<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,7 +25,8 @@
 					<td colspan="3"><label for="data">Código Disciplina:</label> <input
 						class="input_data_id" type="number" min="0" step="1" id="codigo"
 						name="codigo" placeholder="Codigo Disciplina"
-						value='<c:out value="${disciplina.codigo }"></c:out>'></td>
+						value='<c:out value="${disciplina.codigo }"></c:out>'
+						style="width: 150px;"></td>
 					<td><input type="submit" id="botao" name="botao"
 						value="Buscar"></td>
 				</tr>
@@ -42,31 +43,32 @@
 						class="input_data_id" type="number" min="0" max="23" step="1"
 						id="horasSemanais" name="horasSemanais"
 						placeholder="Horas Semanais"
-						value='<c:out value="${disciplina.horasSemanais }"></c:out>'></td>
+						value='<c:out value="${disciplina.horasSemanais }"></c:out>'
+						style="width: 150px;"></td>
 				</tr>
-				
+
 				<tr>
 					<td colspan="4"><label for="data">Horario Inicio :</label> <input
-						class="input_data" type="text" id="horarioInicio" name="horarioInicio"
-						placeholder="Nome"
-						value='<c:out value="${disciplina.horaInicio }"></c:out>'></td>
+						class="input_data" type="text" id="horarioInicio"
+						name="horarioInicio" placeholder="Horario Inicio"
+						value='<c:out value="${disciplina.horaInicio }"></c:out>'
+						style="width: 150px;"></td>
 				</tr>
-				
+
 				<tr>
 					<td colspan="4"><label for="data">Semestre:</label> <input
 						class="input_data_id" type="number" min="0" max="23" step="1"
-						id="semestre" name="semestre"
-						placeholder="Semestre"
+						id="semestre" name="semestre" placeholder="Semestre"
 						value='<c:out value="${disciplina.semestre }"></c:out>'></td>
 				</tr>
-				
+
 				<tr>
 					<td colspan="4"><label for="data">Dia da Semana:</label> <input
 						class="input_data" type="text" id="diaSemana" name="diaSemana"
 						placeholder="Dia da Semana"
 						value='<c:out value="${disciplina.diaSemana }"></c:out>'></td>
 				</tr>
-				
+
 
 				<tr>
 					<td colspan="4"><label for="data">Professor:</label><select
@@ -149,7 +151,7 @@
 								<th>Hora Semanais</th>
 								<th>Hora Inicio</th>
 								<th>Semestre</th>
-								<th>Dia Semana</th>								
+								<th>Dia Semana</th>
 								<th>Professor</th>
 								<th>Curso</th>
 
@@ -164,7 +166,6 @@
 									<td><c:out value="${d.horaInicio}" /></td>
 									<td><c:out value="${d.semestre}" /></td>
 									<td><c:out value="${d.diaSemana}" /></td>
-									
 									<td><c:out value="${d.professor.nome}" /></td>
 									<td><c:out value="${d.curso.nome}" /></td>
 								</tr>

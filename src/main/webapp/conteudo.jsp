@@ -7,13 +7,7 @@
 <meta charset="ISO-8859-1">
 <link rel="stylesheet" href="./css/styles.css">
 <title>Conteudo</title>
-<style>
-label {
-	display: inline-block;
-	width: 100px;
-	margin-right: 10px;
-}
-</style>
+
 </head>
 <body>
 	<div>
@@ -44,7 +38,7 @@ label {
 				</tr>
 
 				<tr>
-					<td colspan="4"><label for="data">Nome :</label> <input
+					<td colspan="4"><label for="data">Descrição:</label> <input
 						class="input_data" type="text" id="descricao" name="descricao"
 						placeholder="Descrição"
 						value='<c:out value="${conteudo.descricao }"></c:out>'></td>
@@ -52,21 +46,18 @@ label {
 
 
 				<tr>
-					<td colspan="4"><label for="data">Disciplina:</label><select
-						class="input_data" id="curso" name="curso">
+					<td colspan="4"><label for="data">Disciplina:</label> <select
+						class="input_data" id="disciplina" name="disciplina">
 							<option value="0">Escolha uma Disciplina</option>
-							<c:forEach var="c" items="${disciplinas }">
+							<c:forEach var="d" items="${disciplinas }">
 								<c:if
-									test="${(empty conteudo) || (c.codigo ne conteudo.disciplina.codigo) }">
-									<option value="${c.codigo }">
-										<c:out value="${c }" />
-									</option>
+									test="${(empty conteudo) || (d.codigo ne conteudo.disciplina.codigo) }">
+									<option value="${d.codigo }"><c:out value="${d }" /></option>
 								</c:if>
 								<c:if test="${d.codigo eq conteudo.disciplina.codigo }">
-									<option value="${c.codigo }" selected="selected"><c:out
-											value="${c }" /></option>
+									<option value="${d.codigo }" selected="selected"><c:out
+											value="${d }" /></option>
 								</c:if>
-
 							</c:forEach>
 					</select></td>
 				</tr>
@@ -121,7 +112,7 @@ label {
 									<td><c:out value="${c.codigo}" /></td>
 									<td><c:out value="${c.nome}" /></td>
 									<td><c:out value="${c.descricao}" /></td>
-									<td><c:out value="${d.disciplina.nome}" /></td>
+									<td><c:out value="${c.disciplina.nome}" /></td>
 								</tr>
 							</c:forEach>
 						</tbody>

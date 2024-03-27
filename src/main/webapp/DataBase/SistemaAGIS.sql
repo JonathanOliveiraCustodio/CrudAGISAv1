@@ -51,7 +51,7 @@ CREATE TABLE disciplina (
 codigo				INT IDENTITY (1001,1)		NOT NULL,
 nome				VARCHAR(100)				NOT NULL,
 horasSemanais		INT							NOT NULL,
-horarioInicio       TIME						NOT NULL,
+horarioInicio       VARCHAR(10)						NOT NULL,
 semestre			INT							NOT NULL,
 diaSemana			VARCHAR(20)					NOT NULL,
 codigoProfessor		INT							NOT NULL,
@@ -85,6 +85,17 @@ FOREIGN KEY (codigoDisciplina) REFERENCES disciplina(codigo)
 )
 GO
 
+CREATE TABLE conteudo(
+codigo				INT			   NOT NULL,
+nome				VARCHAR(100)   NOT NULL,
+descricao			VARCHAR(100)   NOT NULL,
+codigoDisciplina	INT			   NOT NULL
+PRIMARY KEY   (codigo)
+FOREIGN KEY (codigoDisciplina) REFERENCES disciplina (codigo)
+)
+GO
+
+SELECT * FROM conteudo
 
 INSERT INTO curso (codigo, nome, cargaHoraria, sigla, ultimaNotaENADE, turno) 
 VALUES 
@@ -126,6 +137,29 @@ VALUES
 (11122233344, 'Beltrano Pereira', NULL, '1995-03-10', '111222333', 'beltrano@hotmail.com', 'beltrano@empresa.com', '2010-05-20', 'Instituto Z', 78.25, 20, 2012, 1, '2022-06-30', 111222333, 3),
 (55566677788, 'Maria Santos', NULL, '1993-11-08', '555666777', 'maria_santos@gmail.com', 'maria@empresa.com', '2009-10-15', 'Escola W', 89.00, 7, 2013, 2, '2023-12-31', 555666777, 2),
 (99988877766, 'João Oliveira', NULL, '1994-07-25', '999888777', 'joao.oliveira@yahoo.com', 'joao@empresa.com', '2011-04-30', 'Colégio V', 94.25, 3, 2014, 1, '2024-06-30', 999888777, 1);
+
+INSERT INTO conteudo VALUES 
+    (1, 'Álgebra', 'Estudo dos números e operações', 1003),
+    (2, 'Geometria', 'Estudo das formas e dos espaços', 1003),
+    (3, 'Cálculo Diferencial', 'Estudo das taxas de variação', 1003),
+    (4, 'Células', 'Unidades básicas da vida', 1006),
+    (5, 'Energia', 'Capacidade de realizar trabalho', 1006),
+    (6, 'Evolução', 'Desenvolvimento das espécies ao longo do tempo', 1006),
+    (7, 'Idade Média', 'Período histórico entre os séculos V e XV', 1007),
+    (8, 'Revolução Industrial', 'Transformações econômicas e sociais no século XVIII', 1007),
+    (9, 'Descobrimento do Brasil', 'Chegada dos portugueses em 1500', 1007),
+    (10, 'Relevo Brasileiro', 'Características geográficas do país', 1007),
+    (11, 'Literatura Brasileira', 'Produções literárias do Brasil', 1008),
+    (12, 'Gramática', 'Estudo da estrutura e funcionamento da língua', 1008),
+    (13, 'Equações', 'Expressões matemáticas com incógnitas', 1003),
+    (14, 'Fisiologia', 'Estudo das funções dos organismos vivos', 1005),
+    (15, 'Guerra Fria', 'Conflito político entre EUA e URSS', 1005),
+    (16, 'Globalização', 'Integração econômica e cultural mundial', 1009),
+    (17, 'Morfologia', 'Estudo da estrutura das palavras', 1009),
+    (18, 'Polinômios', 'Expressões algébricas com várias variáveis',1009),
+    (19, 'Genética', 'Estudo dos genes e hereditariedade', 1003),
+    (20, 'Renascimento', 'Movimento cultural e artístico do século XVI', 1004);
+
 
 CREATE VIEW v_listarCurso AS
 SELECT codigo, nome, cargaHoraria, sigla, ultimaNotaENADE, turno FROM curso
@@ -186,20 +220,23 @@ BEGIN
         END
     END
     ELSE IF (@acao = 'D')
+BEGIN
+    IF @tit_valido = 1
     BEGIN
         DELETE FROM professor WHERE codigo = @codigo
         SET @saida = 'Professor excluído com sucesso'
     END
     ELSE
     BEGIN
-        RAISERROR('Operação inválida', 16, 1)
+        RAISERROR('Titulação inválida', 16, 1)
         RETURN
     END
 END
+END;
 
 
 DECLARE @out1 VARCHAR(100)
-EXEC sp_iud_professor 'D', 22113, 'Teste Prof 1', 'Doutosr', @out1 OUTPUT
+EXEC sp_iud_professor 'D', 9, 'Teste Prof 1', 'Doutor', @out1 OUTPUT
 PRINT @out1
 
 SELECT * FROM professor
@@ -276,7 +313,7 @@ END
 
 
 DECLARE @out1 VARCHAR(100);
-EXEC sp_iud_curso 'D', 1, 'Curso Teste', 400, 'CT', 8.5, 'Manhã', @out1 OUTPUT;
+EXEC sp_iud_curso 'I', 12, 'Curso Teste', 400, 'CT', 8.5, 'Manhã', @out1 OUTPUT;
 PRINT @out1;
 
 
@@ -459,7 +496,7 @@ CREATE PROCEDURE sp_iud_disciplina
     @horasSemanais INT,
     @horarioInicio TIME,
     @semestre INT,
-	@diaSemana VARCHAR(20),
+    @diaSemana VARCHAR(20),
     @codigoProfessor INT,
     @codigoCurso INT,
     @saida VARCHAR(100) OUTPUT
@@ -480,8 +517,16 @@ BEGIN
     END
     ELSE IF (@acao = 'D')
     BEGIN
-        DELETE FROM disciplina WHERE codigo = @codigo
-        SET @saida = 'Disciplina excluída com sucesso'
+        -- Verifica se a disciplina está associada a um professor e a um curso
+        IF EXISTS (SELECT 1 FROM disciplina WHERE codigo = @codigo AND codigoProfessor IS NOT NULL AND codigoCurso IS NOT NULL)
+        BEGIN
+            DELETE FROM disciplina WHERE codigo = @codigo
+            SET @saida = 'Disciplina excluída com sucesso'
+        END
+        ELSE
+        BEGIN
+            SET @saida = 'A disciplina não pode ser excluída porque está associada a um professor ou a um curso'
+        END
     END
     ELSE
     BEGIN
@@ -491,6 +536,52 @@ BEGIN
 END
 
 
+
 DECLARE @out1 VARCHAR(100)
-EXEC sp_iud_disciplina 'I', 1013, 'Nome da Disciplina', 4, '13:00', 2,'Segunda-Feira', 1, 7, @out1 OUTPUT
+EXEC sp_iud_disciplina 'D', 1013, 'Nome da Disciplina', 4, '13:00', 2,'Segunda-Feira', 1, 7, @out1 OUTPUT
 PRINT @out1
+
+SELECT d.codigo, d.nome AS nomeDisciplina, d.horasSemanais, d.horarioInicio, d.semestre, d.diaSemana, p.nome AS nomeProfessor, c.nome AS nomeCurso 
+FROM disciplina d JOIN professor p ON d.codigoProfessor = p.codigo 
+JOIN curso c ON d.codigoCurso = c.codigo 
+
+CREATE PROCEDURE sp_iud_conteudo 
+ @acao CHAR(1), 
+ @codigo INT, 
+ @nome VARCHAR(100), 
+ @descricao VARCHAR(100),
+ @codigoDisciplina INT,
+ @saida VARCHAR(100) OUTPUT
+AS
+BEGIN
+    IF (@acao = 'I')
+    BEGIN
+        INSERT INTO conteudo (codigo, nome, descricao, codigoDisciplina) 
+        VALUES (@codigo, @nome, @descricao, @codigoDisciplina)
+        SET @saida = 'Conteúdo inserido com sucesso'
+    END
+    ELSE IF (@acao = 'U')
+    BEGIN
+        UPDATE conteudo 
+        SET nome = @nome, descricao = @descricao, codigoDisciplina = @codigoDisciplina
+        WHERE codigo = @codigo
+        SET @saida = 'Conteúdo alterado com sucesso'
+    END
+    ELSE IF (@acao = 'D')
+    BEGIN
+        DELETE FROM conteudo WHERE codigo = @codigo
+        SET @saida = 'Conteúdo excluído com sucesso'
+    END
+    ELSE
+    BEGIN
+        RAISERROR('Operação inválida', 16, 1)
+        RETURN
+    END
+END
+
+-- Teste da Procedure
+DECLARE @out1 VARCHAR(100)
+EXEC sp_iud_conteudo 'D', 31, 'Nome do Conteúdo ALterado', 'Descrição do Conteúdo', 1003, @out1 OUTPUT
+PRINT @out1
+
+SELECT * FROM conteudo
