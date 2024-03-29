@@ -72,15 +72,25 @@ FOREIGN KEY (aluno) REFERENCES aluno(CPF)
 GO
 
 -- Tabela Matricula
+GO
 CREATE TABLE matricula (
 codigo				INT			NOT NULL,
-aluno				CHAR(11)		NOT NULL,
-codigoCurso			INT		NOT NULL,
-codigoDisciplina	INT     NOT NULL,
+codigoAluno				CHAR(11)		NOT NULL,
 dataMatricula		DATE	NOT NULL,
-situacaoDisciplina	VARCHAR(20)	NOT NULL
+semestre        	INT	NOT NULL
 PRIMARY KEY (codigo)
-FOREIGN KEY (aluno) REFERENCES Aluno(CPF),
+FOREIGN KEY (codigoAluno) REFERENCES aluno(CPF),
+)
+GO
+
+GO
+CREATE TABLE matriculaDisciplina (
+CodigoMatricula				    INT 			 NOT NULL,
+codigoDisciplina				INT				 NOT NULL,
+situacao						VARCHAR(20)		 NOT NULL,
+notaFinal						DECIMAL	(3,2)	 NOT NULL
+PRIMARY KEY (CodigoMatricula,codigoDisciplina)
+FOREIGN KEY (CodigoMatricula) REFERENCES matricula(codigo),
 FOREIGN KEY (codigoDisciplina) REFERENCES disciplina(codigo)
 )
 GO
@@ -95,7 +105,36 @@ FOREIGN KEY (codigoDisciplina) REFERENCES disciplina (codigo)
 )
 GO
 
-SELECT * FROM conteudo
+-- Inserindo registros na tabela matricula
+INSERT INTO matricula (codigo, codigoAluno, dataMatricula, semestre)
+VALUES
+(1, '12345678910', '2022-01-10', 1),
+(2, '12345678910', '2022-07-28', 2),
+(3, '39590327060', '2024-01-28', 1),
+(4, '39590327060', '2024-07-28', 2),
+(5, '39590327060', '2025-03-28', 3),
+(6, '55566677788', '2024-03-28', 1),
+(7, '55566677788', '2024-03-28', 1),
+(8, '98765432198', '2021-01-1', 3),
+(9, '98765432198', '2021-07-28', 4);
+
+SELECT * FROM matricula;
+SELECT * FROM matricula;
+
+
+-- Inserindo registros na tabela matriculaDisciplina
+INSERT INTO matriculaDisciplina (CodigoMatricula, codigoDisciplina, situacao, notaFinal)
+VALUES
+(1,1033,'Aprovado', 8.5),
+(1,1034,'Reprovado', 5.0),
+(1,1035,'Aprovado', 7.2),
+(2,1036,'Reprovado', 4.8),
+(2,1037,'Aprovado', 9.0),
+(2,1035,'Reprovado', 6.5),
+(3,1038,'Aprovado', 8.0),
+(4,1029, 'Reprovado', 4.0),
+(4,1015, 'Aprovado', 7.8),
+(5,1035, 'Reprovado', 3.5);
 
 INSERT INTO curso (codigo, nome, cargaHoraria, sigla, ultimaNotaENADE, turno) 
 VALUES 
