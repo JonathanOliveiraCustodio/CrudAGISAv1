@@ -18,7 +18,7 @@
 	<div align="center" class="container">
 		<form action="disciplina" method="post">
 			<p class="title">
-				<b>Disciplina</b>
+				<b>Manutenção Disciplina</b>
 			</p>
 			<table>
 				<tr>
@@ -48,12 +48,13 @@
 				</tr>
 
 				<tr>
-					<td colspan="4"><label for="data">Horario Inicio :</label> <input
-						class="input_data" type="text" id="horarioInicio"
-						name="horarioInicio" placeholder="Horario Inicio"
+					<td colspan="4"><label for="horarioInicio">Horário de
+							Início:</label> <input class="input_data" type="time" id="horaInicio"
+						name="horaInicio" placeholder="Horário de Início"
 						value='<c:out value="${disciplina.horaInicio }"></c:out>'
 						style="width: 150px;"></td>
 				</tr>
+
 
 				<tr>
 					<td colspan="4"><label for="data">Semestre:</label> <input
@@ -63,13 +64,24 @@
 				</tr>
 
 				<tr>
-					<td colspan="4"><label for="data">Dia da Semana:</label> <input
-						class="input_data" type="text" id="diaSemana" name="diaSemana"
-						placeholder="Dia da Semana"
-						value='<c:out value="${disciplina.diaSemana }"></c:out>'></td>
-				</tr>
 
-
+					<td colspan="4"><label for="diaSemana">Dia da Semana:</label>
+						<select class="input_data" id="diaSemana" name="diaSemana"
+						style="width: 200px;">
+							<option value="">Escolha um Dia da Semana</option>
+							<option value="Segunda-feira"
+								<c:if test="${disciplina.diaSemana eq 'Segunda-feira'}">selected</c:if>>Segunda-feira</option>
+							<option value="Terca-feira"
+								<c:if test="${disciplina.diaSemana eq 'Terca-feira'}">selected</c:if>>Terca-feira</option>
+							<option value="Quarta-feira"
+								<c:if test="${disciplina.diaSemana eq 'Quarta-feira'}">selected</c:if>>Quarta-feira</option>
+							<option value="Quinta-feira"
+								<c:if test="${disciplina.diaSemana eq 'Quinta-feira'}">selected</c:if>>Quinta-feira</option>
+							<option value="Sexta-feira"
+								<c:if test="${disciplina.diaSemana eq 'Sexta-feira'}">selected</c:if>>Sexta-feira</option>
+							<option value="Sabado"
+								<c:if test="${disciplina.diaSemana eq 'Sabado'}">selected</c:if>>Sabado</option>
+					</select></td>
 				<tr>
 					<td colspan="4"><label for="data">Professor:</label><select
 						class="input_data" id="professor" name="professor">
@@ -140,43 +152,43 @@
 	</div>
 	<br />
 	<div align="center">
-		<c:choose>
-			<c:when test="${not empty tipoTabela && tipoTabela eq 'Listar'}">
-				<c:if test="${not empty disciplinas}">
-					<table class="table_round">
-						<thead>
-							<tr>
-								<th>Código</th>
-								<th>Nome</th>
-								<th>Hora Semanais</th>
-								<th>Hora Inicio</th>
-								<th>Semestre</th>
-								<th>Dia Semana</th>
-								<th>Professor</th>
-								<th>Curso</th>
-
-							</tr>
-						</thead>
-						<tbody>
-							<c:forEach var="d" items="${disciplinas}">
-								<tr>
-									<td><c:out value="${d.codigo}" /></td>
-									<td><c:out value="${d.nome}" /></td>
-									<td><c:out value="${d.horasSemanais}" /></td>
-									<td><c:out value="${d.horaInicio}" /></td>
-									<td><c:out value="${d.semestre}" /></td>
-									<td><c:out value="${d.diaSemana}" /></td>
-									<td><c:out value="${d.professor.nome}" /></td>
-									<td><c:out value="${d.curso.nome}" /></td>
-								</tr>
-							</c:forEach>
-						</tbody>
-					</table>
-				</c:if>
-			</c:when>
 
 
-		</c:choose>
+		<c:if test="${not empty disciplinas}">
+			<table class="table_round">
+				<thead>
+					<tr>
+					 <th class="titulo-tabela" colspan="8" style="text-align: center; font-size: 23px;">Lista
+							de Disciplinas</th>
+					</tr>
+					<tr>
+						<th>Código</th>
+						<th>Nome</th>
+						<th>Hora Semanais</th>
+						<th>Hora Início</th>
+						<th>Semestre</th>
+						<th>Dia Semana</th>
+						<th>Professor</th>
+						<th>Curso</th>
+					</tr>
+				</thead>
+				<tbody>
+					<c:forEach var="d" items="${disciplinas}">
+						<tr>
+							<td><c:out value="${d.codigo}" /></td>
+							<td><c:out value="${d.nome}" /></td>
+							<td><c:out value="${d.horasSemanais}" /></td>
+							<td><c:out value="${d.horaInicio}" /></td>
+							<td><c:out value="${d.semestre}" /></td>
+							<td><c:out value="${d.diaSemana}" /></td>
+							<td><c:out value="${d.professor.nome}" /></td>
+							<td><c:out value="${d.curso.nome}" /></td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+		</c:if>
+
 	</div>
 </body>
 </html>

@@ -17,7 +17,7 @@
 	<div align="center" class="container">
 		<form action="conteudo" method="post">
 			<p class="title">
-				<b>Conteudo</b>
+				<b>Manutenção de Conteudo</b>
 			</p>
 			<table>
 				<tr>
@@ -43,8 +43,6 @@
 						placeholder="Descrição"
 						value='<c:out value="${conteudo.descricao }"></c:out>'></td>
 				</tr>
-
-
 				<tr>
 					<td colspan="4"><label for="data">Disciplina:</label> <select
 						class="input_data" id="disciplina" name="disciplina">
@@ -71,7 +69,6 @@
 					<td><input type="submit" id="botao" name="botao"
 						value="Listar"></td>
 				</tr>
-
 			</table>
 		</form>
 	</div>
@@ -93,35 +90,34 @@
 	</div>
 	<br />
 	<div align="center">
-		<c:choose>
-			<c:when test="${not empty tipoTabela && tipoTabela eq 'Listar'}">
-				<c:if test="${not empty conteudos}">
-					<table class="table_round">
-						<thead>
-							<tr>
-								<th>Código</th>
-								<th>Nome</th>
-								<th>Descricao</th>
-								<th>Disciplina</th>
+		<c:if test="${not empty conteudos}">
+			<table class="table_round">
+				<thead>
+					<tr>
+						<th class="titulo-tabela" colspan="4" style="text-align: center; font-size: 23px;">Lista
+							de Conteudo</th>
+					</tr>
+					<tr>
+						<th>Código</th>
+						<th>Nome</th>
+						<th>Descricao</th>
+						<th>Disciplina</th>
 
-							</tr>
-						</thead>
-						<tbody>
-							<c:forEach var="c" items="${conteudos}">
-								<tr>
-									<td><c:out value="${c.codigo}" /></td>
-									<td><c:out value="${c.nome}" /></td>
-									<td><c:out value="${c.descricao}" /></td>
-									<td><c:out value="${c.disciplina.nome}" /></td>
-								</tr>
-							</c:forEach>
-						</tbody>
-					</table>
-				</c:if>
-			</c:when>
+					</tr>
+				</thead>
+				<tbody>
+					<c:forEach var="c" items="${conteudos}">
+						<tr>
+							<td><c:out value="${c.codigo}" /></td>
+							<td><c:out value="${c.nome}" /></td>
+							<td><c:out value="${c.descricao}" /></td>
+							<td><c:out value="${c.disciplina.nome}" /></td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+		</c:if>
 
-
-		</c:choose>
 	</div>
 </body>
 </html>

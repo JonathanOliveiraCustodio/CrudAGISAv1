@@ -1,6 +1,8 @@
 package model;
 
 
+import java.sql.Date;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,11 +14,11 @@ public class Aluno {
 	String CPF;
 	String nome;
 	String nomeSocial;
-	String dataNascimento;
+	Date dataNascimento;
 	String telefoneContato;
 	String emailPessoal;
 	String emailCorporativo;
-	String dataConclusao2Grau;
+	Date dataConclusao2Grau;
 	String instituicaoConclusao2Grau;
 	float pontuacaoVestibular;
 	int posicaoVestibular;

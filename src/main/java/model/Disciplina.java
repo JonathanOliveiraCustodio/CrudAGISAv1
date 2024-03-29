@@ -1,9 +1,5 @@
 package model;
 
-
-
-import java.sql.Time;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +10,7 @@ public class Disciplina {
 	int codigo;
 	String nome;
 	int horasSemanais;
-	Time horaInicio;
+	String horaInicio;
 	int semestre;
 	String diaSemana;
 	Professor professor;

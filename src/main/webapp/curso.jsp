@@ -16,7 +16,7 @@
 	<div align="center" class="container">
 		<form action="curso" method="post">
 			<p class="title">
-				<b>Curso</b>
+				<b>Manutenção Curso</b>
 			</p>
 
 			<table>
@@ -72,18 +72,19 @@
 						value='<c:out value="${curso.turno }"></c:out>'
 						style="width: calc(100% - 90px);"></td>
 				</tr>
-
-				<tr>
+			</table>
+			<table>
+				<tr style="text-align: center;">
 					<td><input type="submit" id="botao" name="botao"
 						value="Cadastrar"></td>
 					<td><input type="submit" id="botao" name="botao"
 						value="Alterar"></td>
 					<td><input type="submit" id="botao" name="botao"
 						value="Excluir"></td>
-
 					<td><input type="submit" id="botao" name="botao"
 						value="Listar"></td>
-
+					<td><input type="submit" id="botao" name="botao"
+						value="Limpar"></td>
 				</tr>
 			</table>
 		</form>
@@ -111,6 +112,10 @@
 		<c:if test="${not empty cursos }">
 			<table class="table_round">
 				<thead>
+					<tr>
+						<th class="titulo-tabela" colspan="6" style="text-align: center; font-size: 23px;">Lista
+							de Cursos</th>
+					</tr>
 					<tr>
 						<th>Código</th>
 						<th>Nome</th>

@@ -34,7 +34,6 @@ public class ConteudoServlet extends HttpServlet {
 		
 		
 	    List<Conteudo> conteudos = new ArrayList<>();
-		
 		ConteudoDao cDao = new ConteudoDao(gDao);
 		
 		try {
@@ -60,34 +59,35 @@ public class ConteudoServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// entrada
 		String cmd = request.getParameter("botao");
-		String codigo = request.getParameter("codigo");		
+		String codigo = request.getParameter("codigo");	
 		String nome = request.getParameter("nome");
 		String descricao = request.getParameter("descricao");
 		String disciplina = request.getParameter("disciplina");
 		
 		// saida
 		String saida = "";
-		String erro = "";		
+		String erro = "";	
+		
 		Conteudo c = new Conteudo();
+		Disciplina d = new Disciplina();
 
 		List<Disciplina> disciplinas = new ArrayList<>();
 		List<Conteudo> conteudos = new ArrayList<>();
 	    
 
-		if (!cmd.contains("Listar")) {
-			c.setCodigo(Integer.parseInt(codigo));
-		}
 		try {
 			
+		if (!cmd.contains("Listar")) {
+			d.setCodigo(Integer.parseInt(disciplina));
+			d = buscarDisciplina(d);
+			c.setDisciplina(d);
+			c.setCodigo(Integer.parseInt(codigo));
+		}
+			
 			disciplinas = listarDisciplinas();
-			conteudos = listarConteudos();
+			//conteudos = listarConteudos();
 				
-		    if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {	  
-			 
-				Disciplina d = new Disciplina();
-				d.setCodigo(Integer.parseInt(disciplina));
-				d = buscarDisciplina(d);
-				c.setDisciplina(d);
+		    if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {	  			
 		    	c.setNome(nome);
 		    	c.setDescricao(descricao);			
 		    }
@@ -100,7 +100,8 @@ public class ConteudoServlet extends HttpServlet {
 		    	saida = alterarConteudo(c);
 				c = null;
 		    }
-		    if (cmd.contains("Excluir")) {
+		    if (cmd.contains("Excluir")) {    	
+		   
 		    	saida = excluirConteudo(c);
 				c = null;
 		    }
@@ -109,12 +110,9 @@ public class ConteudoServlet extends HttpServlet {
 		    }
 		    
 		    if (cmd.contains("Listar")) {
-		        disciplinas = listarDisciplinas();
-		        request.setAttribute("tipoTabela", "Listar"); 
+		        conteudos = listarConteudos();
 		    }
-		    
-	
-		    
+		    			    
 		} catch (SQLException | ClassNotFoundException e) {
 		    erro = e.getMessage();
 		} finally {

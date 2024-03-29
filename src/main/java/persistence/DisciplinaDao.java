@@ -32,6 +32,8 @@ public class DisciplinaDao implements ICrud<Disciplina>, IDisciplinaDao {
 	    sql.append("JOIN professor p ON d.codigoProfessor = p.codigo ");
 	    sql.append("JOIN curso c ON d.codigoCurso = c.codigo ");
 	    sql.append("WHERE d.codigo = ?");
+	    
+
 
 	    PreparedStatement ps = con.prepareStatement(sql.toString());
 	    ps.setInt(1, d.getCodigo());
@@ -49,7 +51,7 @@ public class DisciplinaDao implements ICrud<Disciplina>, IDisciplinaDao {
 	        d.setCodigo(rs.getInt("codigoDisciplina"));
 	        d.setNome(rs.getString("nomeDisciplina"));
 	        d.setHorasSemanais(rs.getInt("horasSemanais"));
-	        d.setHoraInicio(rs.getTime("horarioInicio"));		
+	        d.setHoraInicio(rs.getString("horarioInicio"));		
 			d.setSemestre(rs.getInt("semestre"));
 			d.setDiaSemana(rs.getString("diaSemana"));
 	        d.setProfessor(p);
@@ -68,7 +70,7 @@ public class DisciplinaDao implements ICrud<Disciplina>, IDisciplinaDao {
 		List<Disciplina> disciplinas = new ArrayList<>();
 		Connection con = gDao.getConnection();
 		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT d.codigo, d.nome AS nomeDisciplina, d.horasSemanais, d.horarioInicio, d.semestre, d.diaSemana, p.nome AS nomeProfessor, c.nome AS nomeCurso ");
+		sql.append("SELECT d.codigo, d.nome AS nomeDisciplina, d.horasSemanais, SUBSTRING(d.horarioInicio, 1, 5) AS horarioInicio, d.semestre, d.diaSemana, p.nome AS nomeProfessor, c.nome AS nomeCurso ");
 		sql.append("FROM disciplina d JOIN professor p ON d.codigoProfessor = p.codigo ");
 		sql.append("JOIN curso c ON d.codigoCurso = c.codigo ");
 
@@ -87,7 +89,7 @@ public class DisciplinaDao implements ICrud<Disciplina>, IDisciplinaDao {
 			d.setCodigo(rs.getInt("codigo"));
 			d.setNome(rs.getString("nomeDisciplina"));
 			d.setHorasSemanais(rs.getInt("horasSemanais"));
-			d.setHoraInicio(rs.getTime("horarioInicio"));		
+			d.setHoraInicio(rs.getString("horarioInicio"));		
 			d.setSemestre(rs.getInt("semestre"));
 			d.setDiaSemana(rs.getString("diaSemana"));
 			d.setProfessor(p);
@@ -110,7 +112,7 @@ public class DisciplinaDao implements ICrud<Disciplina>, IDisciplinaDao {
 		cs.setInt(2, d.getCodigo());
 		cs.setString(3, d.getNome());
 		cs.setInt(4, d.getHorasSemanais());	
-		cs.setTime(5, d.getHoraInicio());
+		cs.setString(5, d.getHoraInicio());
 		cs.setInt(6, d.getSemestre());
 		cs.setString(7, d.getDiaSemana());		
 		cs.setInt(8, d.getProfessor().getCodigo());

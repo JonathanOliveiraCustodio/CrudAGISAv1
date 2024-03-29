@@ -1,7 +1,7 @@
 package controller;
 
 import java.io.IOException;
-
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,6 @@ import persistence.AlunoDao;
 import persistence.CursoDao;
 import persistence.GenericDao;
 
-
 @WebServlet("/aluno")
 public class AlunoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -28,30 +27,31 @@ public class AlunoServlet extends HttpServlet {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {String erro = "";
-			
-		    List<Aluno> alunos = new ArrayList<>();
-			GenericDao gDao = new GenericDao();
-		//	AlunoDao aDao = new AlunoDao(gDao);
+			throws ServletException, IOException {
+		String erro = "";
 
-			List<Curso> cursos = new ArrayList<>();
-			CursoDao cDao = new CursoDao(gDao);
+		List<Aluno> alunos = new ArrayList<>();
+		GenericDao gDao = new GenericDao();
+		// AlunoDao aDao = new AlunoDao(gDao);
 
-			try {
-			//	alunos = aDao.listar();
-				cursos = cDao.listar();
+		List<Curso> cursos = new ArrayList<>();
+		CursoDao cDao = new CursoDao(gDao);
 
-			} catch (ClassNotFoundException | SQLException e) {
-				erro = e.getMessage();
+		try {
+			// alunos = aDao.listar();
+			cursos = cDao.listar();
 
-			} finally {
-				request.setAttribute("erro", erro);
-				request.setAttribute("alunos", alunos);
-				request.setAttribute("cursos", cursos);
+		} catch (ClassNotFoundException | SQLException e) {
+			erro = e.getMessage();
 
-				RequestDispatcher rd = request.getRequestDispatcher("aluno.jsp");
-				rd.forward(request, response);
-			}
+		} finally {
+			request.setAttribute("erro", erro);
+			request.setAttribute("alunos", alunos);
+			request.setAttribute("cursos", cursos);
+
+			RequestDispatcher rd = request.getRequestDispatcher("aluno.jsp");
+			rd.forward(request, response);
+		}
 
 	}
 
@@ -80,96 +80,86 @@ public class AlunoServlet extends HttpServlet {
 		String saida = "";
 		String erro = "";
 		Aluno a = new Aluno();
+		Curso c = new Curso();
 		List<Aluno> alunos = new ArrayList<>();
 		List<Curso> cursos = new ArrayList<>();
-		
-		
 
 		if (!cmd.contains("Listar")) {
 			a.setCPF((CPF));
 		}
 		try {
-			alunos = listarAlunos();
-			cursos = listarCursos();
-		    
-		    if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {
-		    	
-		    	a.setNome(nome);
+			 cursos = listarCursos();
+
+			if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {
+
+				a.setNome(nome);
 				a.setNomeSocial(nomeSocial);
-			//	a.setDataNascimento(Date.valueOf(dataNascimento));
-				a.setDataNascimento(dataNascimento);
+				a.setDataNascimento(Date.valueOf(dataNascimento));
 				a.setTelefoneContato(telefoneContato);
 				a.setEmailPessoal(emailPessoal);
 				a.setEmailCorporativo(emailCorporativo);
-			//	a.setDataConclusao2Grau(Date.valueOf(dataConclusao2Grau));
-				a.setDataConclusao2Grau(dataConclusao2Grau);
+				a.setDataConclusao2Grau(Date.valueOf(dataConclusao2Grau));
 				a.setInstituicaoConclusao2Grau(instituicaoConclusao2Grau);
 				a.setPontuacaoVestibular(Float.parseFloat(pontuacaoVestibular));
 				a.setPosicaoVestibular(Integer.parseInt(posicaoVestibular));
 				a.setAnoIngresso(Integer.parseInt(anoIngresso));
 				a.setSemestreIngresso(Integer.parseInt(semestreIngresso));
-			//	a.setSemestreAnoLimiteGraduacao(Date.valueOf(semestreAnoLimiteGraduacao));	
-				a.setSemestreAnoLimiteGraduacao(semestreAnoLimiteGraduacao);
-				a.setRA(Integer.parseInt(RA)); 
-		  
-		    
-				
-				Curso c = new Curso();
+				a.setSemestreAnoLimiteGraduacao((semestreAnoLimiteGraduacao));
+				a.setRA(Integer.parseInt(RA));
+
 				c.setCodigo(Integer.parseInt(curso));
 				c = buscarCurso(c);
-				
 				a.setCurso(c);
-		    }
+			}
 
-		    if (cmd.contains("Cadastrar")) {
-		    	saida = cadastrarAluno(a);
+			if (cmd.contains("Cadastrar")) {
+				saida = cadastrarAluno(a);
 				a = null;
-		    }
-		    if (cmd.contains("Alterar")) {
-		    	saida = alterarAluno(a);
+			}
+			if (cmd.contains("Alterar")) {
+				saida = alterarAluno(a);
 				a = null;
-		    }
-		    if (cmd.contains("Excluir")) {
+			}
+			if (cmd.contains("Excluir")) {
+				a = buscarAluno(a);
 		    	saida = excluirAluno(a);
-				a = null;
-		    }
-		    if (cmd.contains("Buscar")) {
-		        a = buscarAluno(a);
-		    }
-		    
-		    if (cmd.contains("Listar")) {
-		        alunos = listarAlunos();
-		        request.setAttribute("tipoTabela", "Listar"); 
-		    }
-		    
-	
-		    
+				a= null;
+			}
+			if (cmd.contains("Buscar")) {
+				a = buscarAluno(a);
+				//c = buscarCurso(c);
+			}
+
+			if (cmd.contains("Listar")) {
+				alunos = listarAlunos();
+			}
+
 		} catch (SQLException | ClassNotFoundException e) {
-		    erro = e.getMessage();
+			erro = e.getMessage();
 		} finally {
-		    request.setAttribute("saida", saida);
-		    request.setAttribute("erro", erro);
-		    request.setAttribute("aluno", a);
-		    request.setAttribute("alunos", alunos);
-		    request.setAttribute("cursos", cursos);
-		    RequestDispatcher rd = request.getRequestDispatcher("aluno.jsp");
-		    rd.forward(request, response);
+			request.setAttribute("saida", saida);
+			request.setAttribute("erro", erro);
+			request.setAttribute("aluno", a);
+			request.setAttribute("alunos", alunos);
+			request.setAttribute("cursos", cursos);
+			RequestDispatcher rd = request.getRequestDispatcher("aluno.jsp");
+			rd.forward(request, response);
 		}
-	
+
 	}
 
-	private String cadastrarAluno(Aluno p) throws SQLException, ClassNotFoundException {
+	private String cadastrarAluno(Aluno a) throws SQLException, ClassNotFoundException {
 		GenericDao gDao = new GenericDao();
 		AlunoDao pDao = new AlunoDao(gDao);
-		String saida = pDao.iudAluno("I", p);
+		String saida = pDao.iudAluno("I", a);
 		return saida;
 
 	}
 
-	private String alterarAluno(Aluno p) throws SQLException, ClassNotFoundException {
+	private String alterarAluno(Aluno a) throws SQLException, ClassNotFoundException {
 		GenericDao gDao = new GenericDao();
 		AlunoDao pDao = new AlunoDao(gDao);
-		String saida = pDao.iudAluno("U", p);
+		String saida = pDao.iudAluno("U", a);
 		return saida;
 
 	}
@@ -182,22 +172,20 @@ public class AlunoServlet extends HttpServlet {
 
 	}
 
-	private Aluno buscarAluno(Aluno p) throws SQLException, ClassNotFoundException {
+	private Aluno buscarAluno(Aluno a) throws SQLException, ClassNotFoundException {
 		GenericDao gDao = new GenericDao();
 		AlunoDao pDao = new AlunoDao(gDao);
-		p = pDao.consultar(p);
-		return p;
-
+		a = pDao.consultar(a);
+		return a;
 	}
 
 	private List<Aluno> listarAlunos() throws SQLException, ClassNotFoundException {
 		GenericDao gDao = new GenericDao();
 		AlunoDao pDao = new AlunoDao(gDao);
 		List<Aluno> alunos = pDao.listar();
-
 		return alunos;
 	}
-	
+
 	private Curso buscarCurso(Curso c) throws SQLException, ClassNotFoundException {
 		GenericDao gDao = new GenericDao();
 		CursoDao cDao = new CursoDao(gDao);

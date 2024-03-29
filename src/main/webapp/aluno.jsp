@@ -16,27 +16,28 @@
 	<div align="center" class="container">
 		<form action="aluno" method="post">
 			<p class="title">
-				<b>Aluno</b>
+				<b>Manuteção de Aluno</b>
 			</p>
 
 			<table>
 				<tr>
-					<td colspan="3"><label for="CPF">CPF:</label><input
+					<td colspan="4"><label for="CPF">CPF:</label><input
 						class="input_data" type="number" id="CPF" name="CPF"
 						placeholder="CPF" value='<c:out value="${aluno.CPF }"></c:out>'></td>
 					<td><input type="submit" id="botao" name="botao"
 						value="Buscar"></td>
 				</tr>
 				<tr>
+
 					<td colspan="4"><label for="nome">Nome:</label><input
 						class="input_data" type="text" id="nome" name="nome"
 						placeholder="Nome" value='<c:out value="${aluno.nome }"></c:out>'></td>
-				</tr>
-				<tr>
 					<td colspan="4"><label for="nomeSocial">Nome Social:</label><input
 						class="input_data" type="text" id="nomeSocial" name="nomeSocial"
 						placeholder="Nome Social"
 						value='<c:out value="${aluno.nomeSocial }"></c:out>'></td>
+
+
 				</tr>
 
 				<tr>
@@ -44,29 +45,31 @@
 							Nascimento:</label><input class="input_data" type="date"
 						id="dataNascimento" name="dataNascimento"
 						placeholder="Data Nascimento"
-						value='<c:out value="${aluno.dataNascimento }"></c:out>'>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="4"><label for="telefoneContato">Telefone
+						value='<c:out value="${aluno.dataNascimento }"></c:out>'></td>
+
+					<td colspan="4"><label for="telefoneContato">Tel
 							Contato:</label><input class="input_data" type="text"
 						id="telefoneContato" name="telefoneContato"
 						placeholder="Telefone Contato"
 						value='<c:out value="${aluno.telefoneContato }"></c:out>'></td>
+
 				</tr>
+
 				<tr>
 					<td colspan="4"><label for="emailPessoal">E-mail
 							Pessoal:</label><input class="input_data" type="text" id="emailPessoal"
 						name="emailPessoal" placeholder="E-mail Pessoal"
 						value='<c:out value="${aluno.emailPessoal }"></c:out>'></td>
-				</tr>
 
-				<tr>
 					<td colspan="4"><label for="emailCorporativo">E-mail
 							Corporativo:</label><input class="input_data" type="text"
 						id="emailCorporativo" name="emailCorporativo"
 						placeholder="E-mail Corporativo"
 						value='<c:out value="${aluno.emailCorporativo }"></c:out>'></td>
+				</tr>
+
+				<tr>
+
 				</tr>
 				<tr>
 					<td colspan="4"><label for="dataConclusao2Grau">Data
@@ -74,9 +77,7 @@
 						id="dataConclusao2Grau" name="dataConclusao2Grau"
 						placeholder="Data Conclusao 2 Grau"
 						value='<c:out value="${aluno.dataConclusao2Grau }"></c:out>'></td>
-				</tr>
 
-				<tr>
 					<td colspan="4"><label for="nome">Instituicao
 							Conclusao 2Grau:</label><input class="input_data" type="text"
 						id="instituicaoConclusao2Grau" name="instituicaoConclusao2Grau"
@@ -90,9 +91,7 @@
 						id="pontuacaoVestibular" name="pontuacaoVestibular"
 						placeholder="Pontuacao Vestibular"
 						value='<c:out value="${aluno.pontuacaoVestibular }"></c:out>'></td>
-				</tr>
 
-				<tr>
 					<td colspan="4"><label for="posicaoVestibular">Posicao
 							Vestibular:</label><input class="input_data" type="text"
 						id="posicaoVestibular" name="posicaoVestibular"
@@ -105,22 +104,12 @@
 						class="input_data" type="text" id="anoIngresso" name="anoIngresso"
 						placeholder="Ano Ingresso"
 						value='<c:out value="${aluno.anoIngresso }"></c:out>'></td>
-				</tr>
 
-				<tr>
 					<td colspan="4"><label for="semestreIngresso">Semestre
 							Ingresso:</label><input class="input_data" type="text"
 						id="semestreIngresso" name="semestreIngresso"
 						placeholder="Semestre Ingresso"
 						value='<c:out value="${aluno.semestreIngresso }"></c:out>'></td>
-				</tr>
-				<tr>
-					<td colspan="4"><label for="semestreAnoLimiteGraduacao">Semestre
-							Limite Graduação:</label> <input class="input_data" type="text"
-						id="semestreAnoLimiteGraduacao" name="semestreAnoLimiteGraduacao"
-						placeholder="Semestre Limite Graduação"
-						value='<c:out value="${aluno.semestreAnoLimiteGraduacao }"></c:out>'
-						readonly onkeypress="showAlert()"></td>
 				</tr>
 
 				<tr>
@@ -128,28 +117,40 @@
 						class="input_data" type="text" id="RA" name="RA" placeholder="RA"
 						value='<c:out value="${aluno.RA }"></c:out>' readonly
 						onkeypress="showAlert()"></td>
-				</tr>
-				
-				<tr>
-				<td colspan="4"><label for="data">Curso:</label><select class="input_data" id="curso"
-					name="curso">
-						<option value="0">Escolha um Curso</option>
-						<c:forEach var="p" items="${cursos }">
-							<c:if
-								test="${(empty curso) || (p.codigo ne aluno.curso.codigo) }">
-								<option value="${p.codigo }">
-									<c:out value="${p }" />
-								</option>
-							</c:if>
-							<c:if test="${p.codigo eq aluno.curso.codigo}">
-								<option value="${p.codigo }" selected="selected"><c:out
-										value="${p }" /></option>
-							</c:if>
 
-						</c:forEach>
-				</select></td>
-			</tr>	
+					<td colspan="4"><label for="semestreAnoLimiteGraduacao">
+							Limite Graduação:</label> <input class="input_data" type="date"
+						id="semestreAnoLimiteGraduacao" name="semestreAnoLimiteGraduacao"
+						placeholder="Semestre Limite Graduação"
+						value='<c:out value="${aluno.semestreAnoLimiteGraduacao }"></c:out>'
+						readonly onkeypress="showAlert()"></td>
+				</tr>
+
 				<tr>
+					<td colspan="4"><label for="data">Curso:</label><select
+						class="input_data" id="curso" name="curso">
+							<option value="0">Escolha um Curso</option>
+							<c:forEach var="c" items="${cursos }">
+								<c:if
+									test="${(empty curso) || (c.codigo ne aluno.curso.codigo) }">
+									<option value="${c.codigo }">
+										<c:out value="${c }" />
+									</option>
+								</c:if>
+								<c:if test="${c.codigo eq aluno.curso.codigo}">
+									<option value="${c.codigo }" selected="selected"><c:out
+											value="${c }" /></option>
+								</c:if>
+
+							</c:forEach>
+					</select></td>
+				</tr>
+
+
+			</table>
+			<table>
+
+				<tr style="text-align: center;">
 					<td><input type="submit" id="botao" name="botao"
 						value="Cadastrar"></td>
 					<td><input type="submit" id="botao" name="botao"
@@ -160,7 +161,6 @@
 						value="Listar"></td>
 				</tr>
 			</table>
-			
 		</form>
 	</div>
 	<br />
@@ -187,20 +187,24 @@
 			<table class="table_round">
 				<thead>
 					<tr>
+						<th class="titulo-tabela" colspan="16" style="text-align: center; font-size: 23px;">Lista
+							de Alunos</th>
+					</tr>
+					<tr>
 						<th>CPF</th>
 						<th>Nome</th>
 						<th>Nome Social</th>
-						<th>Data Nascimento</th>
-						<th>Telefone Contato</th>
+						<th>Dt Nascimento</th>
+						<th>Tel Contato</th>
 						<th>E-mail Pessoal</th>
 						<th>E-mail Corporativo</th>
-						<th>Data Conclusao 2Grau</th>
-						<th>Instituicao 2Grau</th>
-						<th>Pontuacao Vestibular</th>
-						<th>Posicao Vestibular</th>
+						<th>Dt Con. 2Grau</th>
+						<th>Inst. 2Grau</th>
+						<th>Pont. Vest.</th>
+						<th>Pos. Vest.</th>
 						<th>Ano Ingresso</th>
-						<th>Semestre Ingresso</th>
-						<th>Semestre Limite</th>
+						<th>Sem. Ingresso</th>
+						<th>Sem. Limite</th>
 						<th>RA</th>
 						<th>Curso</th>
 					</tr>

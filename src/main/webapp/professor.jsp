@@ -16,7 +16,7 @@
 	<div align="center" class="container">
 		<form action="professor" method="post">
 			<p class="title">
-				<b>Professor</b>
+				<b>Manutenção Professor</b>
 			</p>
 
 			<table>

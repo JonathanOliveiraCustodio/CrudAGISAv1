@@ -121,3 +121,9 @@ input[type=submit]:hover {
     background-color: #7093B4; /* Cor de fundo ao passar o mouse */
     color: white; /* Cor do texto ao passar o mouse */
 }
+
+body {
+    background-image: url('planoFundo.png');
+    background-size: cover; 
+    background-position: center; 
+}
