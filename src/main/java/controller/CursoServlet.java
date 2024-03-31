@@ -48,51 +48,58 @@ public class CursoServlet extends HttpServlet {
 		Curso c = new Curso();
 		List<Curso> cursos = new ArrayList<>();
 
-		if (!cmd.contains("Listar")) {
-			c.setCodigo(Integer.parseInt(codigo));
-		}
-		if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {
-			c.setNome(nome);
-			c.setCargaHoraria(Integer.parseInt(cargaHoraria));
-			c.setSigla(sigla);
-			c.setUltimaNotaENADE(Float.parseFloat(ultimaNotaENADE));
-			c.setTurno(turno);
+		if (cmd != null && !cmd.isEmpty() && cmd.contains("Limpar")) {
+			c = null;
 
-		}
-		try {
-			if (cmd.contains("Cadastrar")) {
-				saida = cadastrarCurso(c);
-				c = null;
-			}
-			if (cmd.contains("Alterar")) {
-				saida = alterarCurso(c);
-				c = null;
-			}
-			if (cmd.contains("Excluir")) {
-				saida = excluirCurso(c);
-				c = null;
-			}
-			if (cmd.contains("Buscar")) {
-				c = buscarCurso(c);
-			}
-			if (cmd.contains("Listar")) {
-				cursos = listarCurso();
-			}
+		} else {
 
-			if (cmd.contains("Limpar")) {
-				c = null;
+			if (!cmd.contains("Listar")) {
+				c.setCodigo(Integer.parseInt(codigo));
 			}
-		} catch (SQLException | ClassNotFoundException e) {
-			erro = e.getMessage();
-		} finally {
-			request.setAttribute("saida", saida);
-			request.setAttribute("erro", erro);
-			request.setAttribute("curso", c);
-			request.setAttribute("cursos", cursos);
+			if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {
+				c.setNome(nome);
+				c.setCargaHoraria(Integer.parseInt(cargaHoraria));
+				c.setSigla(sigla);
+				c.setUltimaNotaENADE(Float.parseFloat(ultimaNotaENADE));
+				c.setTurno(turno);
 
-			RequestDispatcher rd = request.getRequestDispatcher("curso.jsp");
-			rd.forward(request, response);
+			}
+			try {
+				if (cmd.contains("Cadastrar")) {
+					saida = cadastrarCurso(c);
+					c = null;
+				}
+				if (cmd.contains("Alterar")) {
+					saida = alterarCurso(c);
+					c = null;
+				}
+				if (cmd.contains("Excluir")) {
+					saida = excluirCurso(c);
+					c = null;
+				}
+				if (cmd.contains("Buscar")) {
+					c = buscarCurso(c);
+					if (c == null) {
+						saida = "Nenhum curso encontrado com o código especificado.";
+						c = null;
+					}
+				}
+
+				if (cmd.contains("Listar")) {
+					cursos = listarCurso();
+				}
+			} catch (SQLException | ClassNotFoundException e) {
+				erro = e.getMessage();
+			}
 		}
+
+		request.setAttribute("saida", saida);
+		request.setAttribute("erro", erro);
+		request.setAttribute("curso", c);
+		request.setAttribute("cursos", cursos);
+
+		RequestDispatcher rd = request.getRequestDispatcher("curso.jsp");
+		rd.forward(request, response);
 	}
 
 	private String cadastrarCurso(Curso c) throws SQLException, ClassNotFoundException {

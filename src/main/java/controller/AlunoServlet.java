@@ -88,7 +88,7 @@ public class AlunoServlet extends HttpServlet {
 			a.setCPF((CPF));
 		}
 		try {
-			 cursos = listarCursos();
+			cursos = listarCursos();
 
 			if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {
 
@@ -122,12 +122,18 @@ public class AlunoServlet extends HttpServlet {
 			}
 			if (cmd.contains("Excluir")) {
 				a = buscarAluno(a);
-		    	saida = excluirAluno(a);
-				a= null;
+				saida = excluirAluno(a);
+				a = null;
 			}
 			if (cmd.contains("Buscar")) {
 				a = buscarAluno(a);
-				//c = buscarCurso(c);
+				if (a == null) {
+					saida = "Nenhum aluno encontrado com o CPF especificado.";
+					a = null;
+				}
+			}
+			if (cmd != null && !cmd.isEmpty() && cmd.contains("Limpar")) {
+				a = null;
 			}
 
 			if (cmd.contains("Listar")) {

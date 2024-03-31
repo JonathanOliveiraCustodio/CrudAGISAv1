@@ -21,8 +21,7 @@ public class AlunoDao implements ICrud<Aluno>, IAlunoDao {
 
 	@Override
 	public Aluno consultar(Aluno a) throws SQLException, ClassNotFoundException {
-	    
-		Connection con = gDao.getConnection();
+	    Connection con = gDao.getConnection();
 	    StringBuilder sql = new StringBuilder();
 	    sql.append("SELECT a.CPF, a.nome, a.nomeSocial, a.dataNascimento, a.telefoneContato, ");
 	    sql.append("a.emailPessoal, a.emailCorporativo, a.dataConclusao2Grau, a.instituicaoConclusao2Grau, ");
@@ -45,7 +44,7 @@ public class AlunoDao implements ICrud<Aluno>, IAlunoDao {
 	        a.setEmailCorporativo(rs.getString("emailCorporativo"));
 	        a.setDataConclusao2Grau(rs.getDate("dataConclusao2Grau"));
 	        a.setInstituicaoConclusao2Grau(rs.getString("instituicaoConclusao2Grau"));
-	        a.setPontuacaoVestibular(rs.getInt("pontuacaoVestibular"));
+	        a.setPontuacaoVestibular(rs.getFloat("pontuacaoVestibular"));
 	        a.setPosicaoVestibular(rs.getInt("posicaoVestibular"));
 	        a.setAnoIngresso(rs.getInt("anoIngresso"));
 	        a.setSemestreIngresso(rs.getInt("semestreIngresso"));
@@ -56,12 +55,19 @@ public class AlunoDao implements ICrud<Aluno>, IAlunoDao {
 	        c.setCodigo(rs.getInt("codigoCurso"));
 	        c.setNome(rs.getString("nomeCurso"));
 	        a.setCurso(c);
+
+	        rs.close();
+	        ps.close();
+	        con.close();
+	        return a;
+	    } else {
+	        rs.close();
+	        ps.close();
+	        con.close();
+	        return null;
 	    }
-	    rs.close();
-	    ps.close();
-	    con.close();
-	    return a;
 	}
+
 
 	@Override
 	public List<Aluno> listar() throws SQLException, ClassNotFoundException {
@@ -86,7 +92,7 @@ public class AlunoDao implements ICrud<Aluno>, IAlunoDao {
 	        a.setEmailCorporativo(rs.getString("emailCorporativo"));
 	        a.setDataConclusao2Grau(rs.getDate("dataConclusao2Grau"));
 	        a.setInstituicaoConclusao2Grau(rs.getString("instituicaoConclusao2Grau"));
-	        a.setPontuacaoVestibular(rs.getInt("pontuacaoVestibular"));
+	        a.setPontuacaoVestibular(rs.getFloat("pontuacaoVestibular"));
 	        a.setPosicaoVestibular(rs.getInt("posicaoVestibular"));
 	        a.setAnoIngresso(rs.getInt("anoIngresso"));
 	        a.setSemestreIngresso(rs.getInt("semestreIngresso"));

@@ -7,6 +7,18 @@
 <meta charset="ISO-8859-1">
 <link rel="stylesheet" href="./css/styles.css">
 <title>Aluno</title>
+
+<script>
+	function validarBusca() {
+		var cpf = document.getElementById("CPF").value;
+		if (cpf.trim() === "") {
+			alert("Por favor, insira um CPF.");
+			return false;
+		}
+		return true;
+	}
+</script>
+
 </head>
 <body>
 	<div>
@@ -25,7 +37,7 @@
 						class="input_data" type="number" id="CPF" name="CPF"
 						placeholder="CPF" value='<c:out value="${aluno.CPF }"></c:out>'></td>
 					<td><input type="submit" id="botao" name="botao"
-						value="Buscar"></td>
+						value="Buscar" onclick="return validarBusca()"></td>
 				</tr>
 				<tr>
 
@@ -36,7 +48,6 @@
 						class="input_data" type="text" id="nomeSocial" name="nomeSocial"
 						placeholder="Nome Social"
 						value='<c:out value="${aluno.nomeSocial }"></c:out>'></td>
-
 
 				</tr>
 
@@ -69,9 +80,6 @@
 				</tr>
 
 				<tr>
-
-				</tr>
-				<tr>
 					<td colspan="4"><label for="dataConclusao2Grau">Data
 							Conclusao 2Grau:</label><input class="input_data" type="date"
 						id="dataConclusao2Grau" name="dataConclusao2Grau"
@@ -86,12 +94,14 @@
 				</tr>
 
 				<tr>
-					<td colspan="4"><label for="pontuacaoVestibular">Pontuacao
-							Vestibular:</label><input class="input_data" type="text"
+					<td colspan="4"><label for="pontuacaoVestibular">Pontuação
+							Vestibular:</label> <input class="input_data" type="text"
 						id="pontuacaoVestibular" name="pontuacaoVestibular"
-						placeholder="Pontuacao Vestibular"
-						value='<c:out value="${aluno.pontuacaoVestibular }"></c:out>'></td>
-
+						placeholder="Pontuação Vestibular"
+						value='<c:out value="${aluno.pontuacaoVestibular }"></c:out>'
+						onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode == 46;">
+					</td>
+					
 					<td colspan="4"><label for="posicaoVestibular">Posicao
 							Vestibular:</label><input class="input_data" type="text"
 						id="posicaoVestibular" name="posicaoVestibular"
@@ -101,12 +111,12 @@
 
 				<tr>
 					<td colspan="4"><label for="anoIngresso">Ano Ingresso:</label><input
-						class="input_data" type="text" id="anoIngresso" name="anoIngresso"
-						placeholder="Ano Ingresso"
+						class="input_data" type="number" id="anoIngresso"
+						name="anoIngresso" placeholder="Ano Ingresso"
 						value='<c:out value="${aluno.anoIngresso }"></c:out>'></td>
 
 					<td colspan="4"><label for="semestreIngresso">Semestre
-							Ingresso:</label><input class="input_data" type="text"
+							Ingresso:</label><input class="input_data" type="number"
 						id="semestreIngresso" name="semestreIngresso"
 						placeholder="Semestre Ingresso"
 						value='<c:out value="${aluno.semestreIngresso }"></c:out>'></td>
@@ -114,9 +124,10 @@
 
 				<tr>
 					<td colspan="4"><label for="RA">RA:</label> <input
-						class="input_data" type="text" id="RA" name="RA" placeholder="RA"
-						value='<c:out value="${aluno.RA }"></c:out>' readonly
-						onkeypress="showAlert()"></td>
+						class="input_data" type="number" id="RA" name="RA"
+						placeholder="RA" value="${aluno.RA == null ? '0' : aluno.RA}"
+						readonly onkeypress="showAlert()"></td>
+
 
 					<td colspan="4"><label for="semestreAnoLimiteGraduacao">
 							Limite Graduação:</label> <input class="input_data" type="date"
@@ -149,7 +160,6 @@
 
 			</table>
 			<table>
-
 				<tr style="text-align: center;">
 					<td><input type="submit" id="botao" name="botao"
 						value="Cadastrar"></td>
@@ -159,6 +169,8 @@
 						value="Excluir"></td>
 					<td><input type="submit" id="botao" name="botao"
 						value="Listar"></td>
+						<td><input type="submit" id="botao" name="botao"
+						value="Limpar"></td>
 				</tr>
 			</table>
 		</form>
@@ -187,8 +199,8 @@
 			<table class="table_round">
 				<thead>
 					<tr>
-						<th class="titulo-tabela" colspan="16" style="text-align: center; font-size: 23px;">Lista
-							de Alunos</th>
+						<th class="titulo-tabela" colspan="16"
+							style="text-align: center; font-size: 23px;">Lista de Alunos</th>
 					</tr>
 					<tr>
 						<th>CPF</th>

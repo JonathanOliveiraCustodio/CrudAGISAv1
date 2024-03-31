@@ -9,6 +9,17 @@
 <link rel="stylesheet" href="./css/styles.css">
 <title>Disciplina</title>
 
+<script>
+	function validarBusca() {
+		var cpf = document.getElementById("codigo").value;
+		if (cpf.trim() === "") {
+			alert("Por favor, insira um código.");
+			return false;
+		}
+		return true;
+	}
+</script>
+
 </head>
 <body>
 	<div>
@@ -28,7 +39,7 @@
 						value='<c:out value="${disciplina.codigo }"></c:out>'
 						style="width: 150px;"></td>
 					<td><input type="submit" id="botao" name="botao"
-						value="Buscar"></td>
+						value="Buscar" onclick="return validarBusca()"></td>
 				</tr>
 
 				<tr>
@@ -121,7 +132,9 @@
 							</c:forEach>
 					</select></td>
 				</tr>
-				<tr>
+			
+			</table>
+			<table>	<tr>
 					<td><input type="submit" id="botao" name="botao"
 						value="Cadastrar"></td>
 					<td><input type="submit" id="botao" name="botao"
@@ -130,8 +143,9 @@
 						value="Excluir"></td>
 					<td><input type="submit" id="botao" name="botao"
 						value="Listar"></td>
-				</tr>
-			</table>
+					<td><input type="submit" id="botao" name="botao"
+						value="Limpar"></td>	
+				</tr></table>
 		</form>
 	</div>
 	<br />

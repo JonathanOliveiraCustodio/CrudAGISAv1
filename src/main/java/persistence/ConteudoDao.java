@@ -43,12 +43,16 @@ public class ConteudoDao implements ICrud<Conteudo>, IConteudoDao {
 			c.setDescricao(rs.getString("descricaoConteudo"));
 			c.setDisciplina(d);
 
-		}
-		rs.close();
-		ps.close();
-		con.close();
-
-		return c;
+			rs.close();
+	        ps.close();
+	        con.close();
+	        return c;
+	    } else {
+	        rs.close();
+	        ps.close();
+	        con.close();
+	        return null;
+	    }
 	}
 
 	@Override

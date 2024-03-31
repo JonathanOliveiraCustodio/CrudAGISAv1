@@ -33,11 +33,17 @@ public class CursoDao implements ICrud<Curso>, ICursoDao {
 			c.setSigla(rs.getString("sigla"));
 			c.setUltimaNotaENADE(rs.getFloat("ultimaNotaENADE"));
 			c.setTurno(rs.getString("turno"));
-		}
-		rs.close();
-		ps.close();
-		con.close();
-		return c;
+			
+			rs.close();
+	        ps.close();
+	        con.close();
+	        return c;
+	    } else {
+	        rs.close();
+	        ps.close();
+	        con.close();
+	        return null;
+	    }
 	}
 
 	@Override

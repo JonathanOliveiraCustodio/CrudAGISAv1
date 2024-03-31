@@ -106,12 +106,19 @@ public class ConteudoServlet extends HttpServlet {
 				c = null;
 		    }
 		    if (cmd.contains("Buscar")) {
-		        c = buscarConteudo(c);
-		    }
-		    
-		    if (cmd.contains("Listar")) {
-		        conteudos = listarConteudos();
-		    }
+				c = buscarConteudo(c);
+				if (c == null) {
+					saida = "Nenhum conteudo encontrado com o código especificado.";
+					c = null;
+				}
+			}
+			if (cmd != null && !cmd.isEmpty() && cmd.contains("Limpar")) {
+				c = null;
+			}
+
+			if (cmd.contains("Listar")) {
+				conteudos = listarConteudos();
+			}
 		    			    
 		} catch (SQLException | ClassNotFoundException e) {
 		    erro = e.getMessage();

@@ -95,15 +95,12 @@ public class DisciplinaServlet extends HttpServlet {
 		if (!cmd.contains("Listar")) {
 			p.setCodigo(Integer.parseInt(professor));
 			p = buscarProfessor(p);
-			d.setProfessor(p);
-			
+			d.setProfessor(p);			
 			c.setCodigo(Integer.parseInt(curso));
 			c = buscarCurso(c);
-			d.setCurso(c);
-			
+			d.setCurso(c);			
 			d.setCodigo(Integer.parseInt(codigo));
-		}
-			
+		}			
 			professores = listarProfessores();
 			cursos = listarCursos();
 				
@@ -129,12 +126,19 @@ public class DisciplinaServlet extends HttpServlet {
 				d = null;
 		    }
 		    if (cmd.contains("Buscar")) {
-		        d = buscarDisciplina(d);
-		    }
-		    
-		    if (cmd.contains("Listar")) {
-		        disciplinas = listarDisciplinas();
-		    }
+				d = buscarDisciplina(d);
+				if (d == null) {
+					saida = "Nenhuma disciplina encontrado com o código especificado.";
+					d = null;
+				}
+			}
+			if (cmd != null && !cmd.isEmpty() && cmd.contains("Limpar")) {
+				d = null;
+			}
+
+			if (cmd.contains("Listar")) {
+				disciplinas = listarDisciplinas();
+			}
 		    			    
 		} catch (SQLException | ClassNotFoundException e) {
 		    erro = e.getMessage();

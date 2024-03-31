@@ -7,6 +7,18 @@
 <meta charset="ISO-8859-1">
 <link rel="stylesheet" href="./css/styles.css">
 <title>Curso</title>
+
+<script>
+	function validarBusca() {
+		var cpf = document.getElementById("codigo").value;
+		if (cpf.trim() === "") {
+			alert("Por favor, insira um Código.");
+			return false;
+		}
+		return true;
+	}
+</script>
+
 </head>
 <body>
 	<div>
@@ -28,7 +40,7 @@
 						value='<c:out value="${curso.codigo }"></c:out>'
 						style="width: calc(100% - 90px);"></td>
 					<td><input type="submit" id="botao" name="botao"
-						value="Buscar"></td>
+						value="Buscar" onclick="return validarBusca()"></td>
 				</tr>
 				<tr>
 					<td><label for="nome"
@@ -61,9 +73,12 @@
 					<td colspan="4"><input class="input_data" type="text"
 						id="ultimaNotaENADE" name="ultimaNotaENADE"
 						placeholder="Última Nota ENADE"
-						value='<c:out value="${curso.ultimaNotaENADE }"></c:out>'
+						oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); if(parseFloat(this.value) > 5.0) this.value = '5.0';"
+						value='<c:out value="${curso.ultimaNotaENADE}"></c:out>'
 						style="width: calc(100% - 90px);"></td>
 				</tr>
+
+
 				<tr>
 					<td><label for="turno"
 						style="display: inline-block; width: 100%;">Turno:</label></td>
@@ -113,8 +128,8 @@
 			<table class="table_round">
 				<thead>
 					<tr>
-						<th class="titulo-tabela" colspan="6" style="text-align: center; font-size: 23px;">Lista
-							de Cursos</th>
+						<th class="titulo-tabela" colspan="6"
+							style="text-align: center; font-size: 23px;">Lista de Cursos</th>
 					</tr>
 					<tr>
 						<th>Código</th>

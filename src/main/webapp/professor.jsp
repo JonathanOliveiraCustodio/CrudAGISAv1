@@ -21,7 +21,7 @@
 
 			<table>
 				<tr>
-					<td colspan="4"><label for="data">Código:</label> <input
+					<td colspan="3"><label for="data">Código:</label> <input
 						class="input_data_id" type="number" min="0" step="1" id="codigo"
 						name="codigo" placeholder="Codigo Conteudo"
 						value='<c:out value="${professor.codigo }"></c:out>'
@@ -30,15 +30,20 @@
 						value="Buscar"></td>
 				</tr>
 				<tr>
-					<td colspan="4"><label for="data">Nome:</label><input class="input_data" type="text"
-						id="nome" name="nome" placeholder="Nome"
+					<td colspan="4"><label for="data">Nome:</label><input
+						class="input_data" type="text" id="nome" name="nome"
+						placeholder="Nome"
 						value='<c:out value="${professor.nome }"></c:out>'></td>
 				</tr>
 				<tr>
-					<td colspan="4"><label for="data">Titulação:</label><input class="input_data" type="text"
-						id="titulacao" name="titulacao" placeholder="Titulacao"
+					<td colspan="4"><label for="data">Titulação:</label><input
+						class="input_data" type="text" id="titulacao" name="titulacao"
+						placeholder="Titulacao"
 						value='<c:out value="${professor.titulacao }"></c:out>'></td>
 				</tr>
+			
+			</table>
+			<table>
 				<tr>
 					<td><input type="submit" id="botao" name="botao"
 						value="Cadastrar"></td>
@@ -46,12 +51,11 @@
 						value="Alterar"></td>
 					<td><input type="submit" id="botao" name="botao"
 						value="Excluir"></td>
-
 					<td><input type="submit" id="botao" name="botao"
 						value="Listar"></td>
-
-				</tr>
-			</table>
+					<td><input type="submit" id="botao" name="botao"
+						value="Limpar"></td>
+				</tr></table>
 		</form>
 	</div>
 	<br />

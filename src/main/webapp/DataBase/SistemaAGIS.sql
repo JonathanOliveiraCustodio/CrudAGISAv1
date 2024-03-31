@@ -16,7 +16,7 @@ PRIMARY KEY  (codigo)
 )
 GO
 
-CREATE TABLE aluno (
+CREATE DROP TABLE aluno (
     CPF							CHAR(11) UNIQUE,
     nome						VARCHAR(100),
     nomeSocial					VARCHAR(100),
@@ -240,7 +240,7 @@ BEGIN
     
     IF @tit_valido = 0
     BEGIN
-        RAISERROR('Titulação inválida', 16, 1)
+        SET @saida = 'Titulação inválida'
         RETURN
     END
 
@@ -280,8 +280,10 @@ END
 
 
 
+
+
 DECLARE @out1 VARCHAR(100)
-EXEC sp_iud_professor 'D',1, 'João Silva', 'Doutor', @out1 OUTPUT
+EXEC sp_iud_professor 'U',1, 'João Silva', 'Doutor', @out1 OUTPUT
 PRINT @out1
 
 SELECT * FROM professor
@@ -542,7 +544,7 @@ DECLARE @saida VARCHAR(100);
 DECLARE @semestreAnoLimiteGraduacao DATE;
 DECLARE @RA VARCHAR(10);
 
-EXEC sp_iud_aluno 'I', '38942231896', 'Jonathan', 'fulano social', '1990-07-31', '123456789', 'fulano@email.com', NULL, NULL, NULL, 750.20, 1, 2020, 1, @semestreAnoLimiteGraduacao OUTPUT, @RA OUTPUT,1, @saida OUTPUT;
+EXEC sp_iud_aluno 'D', '12345678910', 'Jonathan', 'fulano social', '1990-07-31', '123456789', 'fulano@email.com', NULL, NULL, NULL, 750.20, 1, 2020, 1, @semestreAnoLimiteGraduacao OUTPUT, @RA OUTPUT,1, @saida OUTPUT;
 
 PRINT @saida;
 

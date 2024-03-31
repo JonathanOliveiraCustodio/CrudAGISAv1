@@ -8,6 +8,17 @@
 <link rel="stylesheet" href="./css/styles.css">
 <title>Conteudo</title>
 
+<script>
+	function validarBusca() {
+		var cpf = document.getElementById("codigo").value;
+		if (cpf.trim() === "") {
+			alert("Por favor, insira um codigo.");
+			return false;
+		}
+		return true;
+	}
+</script>
+
 </head>
 <body>
 	<div>
@@ -27,7 +38,7 @@
 						value='<c:out value="${conteudo.codigo }"></c:out>'
 						style="width: 80px;"></td>
 					<td><input type="submit" id="botao" name="botao"
-						value="Buscar"></td>
+						value="Buscar" onclick="return validarBusca()"></td>
 				</tr>
 
 				<tr>
@@ -59,6 +70,10 @@
 							</c:forEach>
 					</select></td>
 				</tr>
+
+			</table>
+
+			<table>
 				<tr>
 					<td><input type="submit" id="botao" name="botao"
 						value="Cadastrar"></td>
@@ -68,6 +83,8 @@
 						value="Excluir"></td>
 					<td><input type="submit" id="botao" name="botao"
 						value="Listar"></td>
+						<td><input type="submit" id="botao" name="botao"
+						value="Limpar"></td>
 				</tr>
 			</table>
 		</form>
@@ -94,8 +111,9 @@
 			<table class="table_round">
 				<thead>
 					<tr>
-						<th class="titulo-tabela" colspan="4" style="text-align: center; font-size: 23px;">Lista
-							de Conteudo</th>
+						<th class="titulo-tabela" colspan="4"
+							style="text-align: center; font-size: 23px;">Lista de
+							Conteudo</th>
 					</tr>
 					<tr>
 						<th>Código</th>
