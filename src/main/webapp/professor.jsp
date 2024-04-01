@@ -7,6 +7,16 @@
 <meta charset="ISO-8859-1">
 <link rel="stylesheet" href="./css/styles.css">
 <title>Professor</title>
+<script>
+	function validarBusca() {
+		var cpf = document.getElementById("codigo").value;
+		if (cpf.trim() === "") {
+			alert("Por favor, insira um Código.");
+			return false;
+		}
+		return true;
+	}
+</script>
 </head>
 <body>
 	<div>
@@ -27,7 +37,7 @@
 						value='<c:out value="${professor.codigo }"></c:out>'
 						style="width: 80px;"></td>
 					<td><input type="submit" id="botao" name="botao"
-						value="Buscar"></td>
+						value="Buscar" onclick="return validarBusca()"></td>
 				</tr>
 				<tr>
 					<td colspan="4"><label for="data">Nome:</label><input

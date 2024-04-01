@@ -15,7 +15,7 @@ public class Curso {
     
     @Override
 	public String toString() {
-		return nome;
+		return nome + " " + turno;
 	}
 
 }

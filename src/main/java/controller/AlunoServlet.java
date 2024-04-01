@@ -32,13 +32,13 @@ public class AlunoServlet extends HttpServlet {
 
 		List<Aluno> alunos = new ArrayList<>();
 		GenericDao gDao = new GenericDao();
-		// AlunoDao aDao = new AlunoDao(gDao);
+	//	AlunoDao aDao = new AlunoDao(gDao);
 
 		List<Curso> cursos = new ArrayList<>();
 		CursoDao cDao = new CursoDao(gDao);
 
 		try {
-			// alunos = aDao.listar();
+		//	alunos = aDao.listar();
 			cursos = cDao.listar();
 
 		} catch (ClassNotFoundException | SQLException e) {
@@ -138,6 +138,13 @@ public class AlunoServlet extends HttpServlet {
 
 			if (cmd.contains("Listar")) {
 				alunos = listarAlunos();
+			}
+			
+			if (cmd.contains("Telefone")) {		
+				
+				request.setAttribute("aluno", a);
+				RequestDispatcher dispatcher = request.getRequestDispatcher("telefone.jsp");
+			    dispatcher.forward(request, response);
 			}
 
 		} catch (SQLException | ClassNotFoundException e) {

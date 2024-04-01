@@ -63,9 +63,11 @@
 						id="telefoneContato" name="telefoneContato"
 						placeholder="Telefone Contato"
 						value='<c:out value="${aluno.telefoneContato }"></c:out>'></td>
+						
+						<td><input type="submit" id="botao" name="botao"
+						value="Telefone"></td>	
 
 				</tr>
-
 				<tr>
 					<td colspan="4"><label for="emailPessoal">E-mail
 							Pessoal:</label><input class="input_data" type="text" id="emailPessoal"
@@ -171,6 +173,7 @@
 						value="Listar"></td>
 						<td><input type="submit" id="botao" name="botao"
 						value="Limpar"></td>
+											
 				</tr>
 			</table>
 		</form>
