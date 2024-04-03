@@ -140,13 +140,18 @@ public class AlunoServlet extends HttpServlet {
 				alunos = listarAlunos();
 			}
 			
-			if (cmd.contains("Telefone")) {		
-				
-				request.setAttribute("aluno", a);
-				RequestDispatcher dispatcher = request.getRequestDispatcher("telefone.jsp");
-			    dispatcher.forward(request, response);
+			if (cmd.contains("Telefone")) {                    
+			    a = buscarAluno(a);
+			    if (a == null) {
+			        saida = "Nenhum aluno encontrado com o CPF especificado.";
+			        a = null;
+			    } else {
+			        request.setAttribute("aluno", a);
+			        RequestDispatcher dispatcher = request.getRequestDispatcher("telefone.jsp");
+			        dispatcher.forward(request, response);
+			        return; 
+			    }
 			}
-
 		} catch (SQLException | ClassNotFoundException e) {
 			erro = e.getMessage();
 		} finally {

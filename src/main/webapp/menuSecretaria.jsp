@@ -8,23 +8,48 @@ pageEncoding="ISO-8859-1"%>
 <title>CRUD Sistema AGIS</title>
 </head>
 <body>
-	<div>
-		<jsp:include page="headerSecretaria.jsp" />
-	</div>
-	<div class="container py-4">
-		<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center">
-			<div class="container-fluid py-5">
-				<h1 class="display-5 fw-bold">Bem-vindo Secretaria ao Sistema AGIS</h1>
-		      	<p class="lead">Aqui você pode realizar as seguintes opções:</p>
-		      	<div class=" mx-5 px-5 bg-body-tertiary rounded-3 text-center">
-			      	<ul class="list-group d-grid gap-2 border-0">
-	  					<li class="list-group-item">Manter Aluno</li>
-	  					<li class="list-group-item">Manter Curso</li>
-	  					<li class="list-group-item">Manter Disciplina</li>
-	  					<li class="list-group-item">Manter Professor</li>
-	  				</ul>
-				</div>
-		    </div>
+	<nav id="menu">
+		<ul>
+			<li><a href="index.jsp">Home</a></li>
+			<li class="submenu"><a href="#">Matricula &#9662;</a>
+				<ul>
+					<li><a href="periodoMatricula.jsp">Perido Matricula</a></li>
+					<li>
+					<li><a href="matricula.jsp">Matricula</a></li>
+				</ul></li>
+			<li><a href="${pageContext.request.contextPath}/aluno">Aluno</a></li>
+			<li><a href="${pageContext.request.contextPath}/curso">Curso</a></li>
+			<li><a href="${pageContext.request.contextPath}/disciplina">Disciplina</a></li>
+			<li>
+			<li><a href="conteudo.jsp">Conteudo</a></li>
+			<li><a href="${pageContext.request.contextPath}/professor">Professor</a></li>
+		</ul>
+	</nav>
+
+	<div class="spacer"></div>
+	<div align="center">
+		<h1 class="title">Bem-vindo Secretaria ao Sistema AGIS</h1>
+		<h2 class="subtitle">Aqui vocï¿½ pode realizar as seguintes opï¿½ï¿½es:</h2>
+
+		<div class="option">
+			<h3 class="option-title">Manter Aluno</h3>
+		</div>
+		<div class="option">
+			<h2 class="option-title">- Matricula</h2>
+		</div>
+
+		<div class="option">
+			<h3 class="option-title">Manter Curso</h3>
+		</div>
+
+		<div class="option">
+			<h3 class="option-title">Manter Disciplina</h3>
+		</div>
+		<div class="option">
+			<h3 class="option-title">Manter Conteudo</h3>
+		</div>
+		<div class="option">
+			<h3 class="option-title">Manter Professor</h3>
 		</div>
 	</div>
 </body>

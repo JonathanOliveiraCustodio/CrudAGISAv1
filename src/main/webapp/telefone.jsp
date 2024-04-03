@@ -19,8 +19,8 @@
 				<b>Telefones do Aluno</b>
 			</p>
 			<input type="hidden" name="aluno" value="${aluno.CPF}">
-		
-		
+
+
 			<table>
 				<tr>
 					<td><label for="numero">Número:</label></td>
@@ -32,8 +32,8 @@
 							<option value="Comercial">Comercial</option>
 							<option value="Celular">Celular</option>
 					</select></td>
-					<td><input type="submit" name="botao" value="Listar"></td>
-				
+					<td><input type="submit" name="botao" value="Incluir"></td>
+
 				</tr>
 			</table>
 		</form>
@@ -54,7 +54,6 @@
 						<th>CPF do Aluno</th>
 						<th>Número</th>
 						<th>Tipo</th>
-						
 						<th>Editar</th>
 						<th>Excluir</th>
 					</tr>
@@ -68,9 +67,25 @@
 							<td><c:out value="${t.aluno.CPF}" /></td>
 							<td><c:out value="${t.numero}" /></td>
 							<td><c:out value="${t.tipo}" /></td>
-
-							<td><button onclick="editarTelefone(${t.codigo})">Editar</button></td>
-							<td><button onclick="excluirTelefone(${t.codigo})">Excluir</button></td>
+							<td>
+								<form action="editar-telefone" method="post">
+									<input type="hidden" name="codigo" value="${t.codigo}">
+									<input type="hidden" name="aluno" value="${t.aluno.CPF}">
+									<input type="hidden" name="numero" value="${t.numero}">
+									<input type="hidden" name="tipo" value="${t.tipo}">
+									<button type="submit">Editar</button>
+								</form>
+							</td>
+							<td>
+								<form action="telefone" method="post">
+									<input type="hidden" name="codigo" value="${t.codigo}">
+									<input type="hidden" name="aluno" value="${t.aluno.CPF}">
+									<input type="hidden" name="numero" value="${t.numero}">
+									<input type="hidden" name="tipo" value="${t.tipo}"> <input
+										type="hidden" name="botao" value="Excluir">
+									<button type="submit">Excluir</button>
+								</form>
+							</td>
 						</tr>
 					</c:forEach>
 				</tbody>

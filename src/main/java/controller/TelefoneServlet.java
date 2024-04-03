@@ -29,7 +29,7 @@ public class TelefoneServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String erro = "";
 		String aluno = request.getParameter("aluno");
-		Aluno a = new Aluno();
+		//Aluno a = new Aluno();
 		List<Telefone> telefones = new ArrayList<>();
 		
 		try {
@@ -47,76 +47,77 @@ public class TelefoneServlet extends HttpServlet {
 		}
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	    // Entrada
+	    String cmd = request.getParameter("botao");
+	    String codigo = request.getParameter("codigo");    
+	    String aluno = request.getParameter("aluno");
+	    String numero = request.getParameter("numero");
+	    String tipo = request.getParameter("tipo");
+	    
+	    // Verificar se o botão Telefones foi clicado
+	    if (cmd != null && cmd.equals("Telefones")) {
+	        // Redirecionar para a página "telefone" com o parâmetro aluno
+	        response.sendRedirect("telefone?aluno=" + aluno);
+	        return; // Terminar o processamento do método doPost
+	    }
+	    
+	    // Saída
+	    String saida = "";
+	    String erro = "";
+	    
+	    Telefone t = new Telefone();
+	    Aluno a = new Aluno();
 
-		String cmd = request.getParameter("botao");
-		String codigo = request.getParameter("codigo");
-		String aluno = request.getParameter("aluno");
-		String numero = request.getParameter("numero");
-		String tipo = request.getParameter("tipo");
+	    List<Telefone> telefones = new ArrayList<>();
+	    
+	    try {
+	        if (!cmd.contains("Listar")) {
+	            a.setCPF(aluno);
+	            a = buscarAluno(a);
+	            t.setAluno(a);
+	            t.setNumero(numero);
+	            t.setTipo(tipo);
+	        }
+	        
+	        telefones = listarTelefones(aluno);
+	        
+	        if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {             
+	            t.setCodigo(Integer.parseInt(codigo));
+	            t.setNumero(numero);
+	            t.setTipo(tipo);        
+	        }
 
-		String saida = "";
-		String erro = "";
-
-		Telefone t = new Telefone();
-
-		Aluno a = new Aluno();
-		List<Aluno> alunos = new ArrayList<>();
-		List<Telefone> telefones = new ArrayList<>();
-
-		try {
-			aluno = request.getParameter("aluno");
-			telefones = listarTelefones(aluno);
-
-			if (!cmd.contains("Listar")) {
-				t.setCodigo(Integer.parseInt(codigo));
-			}
-
-			if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {
-				t.setNumero(numero);
-				t.setTipo(tipo);
-				a.setCPF(aluno);
-				a = buscarAluno(a);
-				t.setAluno(a);
-			}
-
-			if (cmd.contains("Cadastrar")) {
-				saida = cadastrarTelefone(t);
-				t = null;
-			}
-			if (cmd.contains("Alterar")) {
-				saida = alterarTelefone(t);
-				t = null;
-			}
-			if (cmd.contains("Excluir")) {
-				t = buscarTelefone(t);
-				saida = excluirTelefone(t);
-				t = null;
-			}
-			if (cmd.contains("Buscar")) {
-				t = buscarTelefone(t);
-				if (t == null) {
-					saida = "Nenhum telefone encontrado com o código especificado.";
-					t = null;
-				}
-			}
-			if (cmd != null && !cmd.isEmpty() && cmd.contains("Limpar")) {
-				t = null;
-			}
-
-		} catch (SQLException | ClassNotFoundException e) {
-			erro = e.getMessage();
-		} finally {
-			request.setAttribute("saida", saida);
-			request.setAttribute("erro", erro);
-			request.setAttribute("telefone", t);
-			request.setAttribute("alunos", alunos);
-			request.setAttribute("telefones", telefones);
-			RequestDispatcher rd = request.getRequestDispatcher("telefone.jsp");
-			rd.forward(request, response);
-		}
-
+	        if (cmd.contains("Cadastrar")) {
+	            saida = cadastrarTelefone(t);
+	        }
+	        if (cmd.contains("Alterar")) {
+	            saida = alterarTelefone(t);
+	        }
+	        if (cmd.contains("Excluir")) {       
+	            saida = excluirTelefone(t);
+	        }
+	        if (cmd.contains("Buscar")) {
+	            t = buscarTelefone(t);
+	            if (t == null) {
+	                saida = "Nenhum conteudo encontrado com o código especificado.";
+	            }
+	        }
+	        
+	        if (cmd.contains("Listar")) {
+	            telefones = listarTelefones(aluno);
+	        }
+	        
+	    } catch (SQLException | ClassNotFoundException e) {
+	        erro = e.getMessage();
+	    } finally {
+	        request.setAttribute("saida", saida);
+	        request.setAttribute("erro", erro);
+	        request.setAttribute("telefone", t);
+	        request.setAttribute("telefones", telefones);   
+	        RequestDispatcher rd = request.getRequestDispatcher("telefone.jsp");
+	        rd.forward(request, response);
+	    }
 	}
 
 	private String cadastrarTelefone(Telefone a) throws SQLException, ClassNotFoundException {
