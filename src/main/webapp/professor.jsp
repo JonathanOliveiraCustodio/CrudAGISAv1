@@ -11,7 +11,7 @@
 	function validarBusca() {
 		var cpf = document.getElementById("codigo").value;
 		if (cpf.trim() === "") {
-			alert("Por favor, insira um Cï¿½digo.");
+			alert("Por favor, insira um Código.");
 			return false;
 		}
 		return true;
@@ -26,10 +26,10 @@
 	<div class="container py-4">
 		<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow">
 			<div class="container-fluid py-5">
-				<h1 class="display-5 fw-bold">Manutenï¿½ï¿½o de Profesor</h1>
+				<h1 class="display-5 fw-bold">Manutenção de Profesor</h1>
 		        <div class="d-flex gap-2 justify-content-center py-2">
 					<form action="professor" method="post" class="row g-3 mt-3">
-						<label for="data" class="form-label col-md-1">Cï¿½digo:</label> 
+						<label for="data" class="form-label col-md-1">Código:</label> 
 						<div class="col-md-2">	
 							<input
 							class="form-control" type="number" min="0" step="1" id="codigo"
@@ -38,7 +38,7 @@
 						</div>
 						<div class="col-md-1">	
 							<input type="submit" id="botao" name="botao" class="btn btn-primary mb-3"
-							value="Buscar">
+							value="Buscar" onclick="return validarBusca()">
 						</div>
 						<label for="data" class="form-label col-md-1">Nome:</label>
 						<div class="col-md-3">	
@@ -47,7 +47,7 @@
 							placeholder="Nome"
 							value='<c:out value="${professor.nome }"></c:out>'>
 						</div>
-						<label for="data" class="form-label col-md-1">Titulaï¿½ï¿½o:</label>
+						<label for="data" class="form-label col-md-1">Titulação:</label>
 						<div class="col-md-3">	
 							<input
 							class="form-control" type="text" id="titulacao" name="titulacao"

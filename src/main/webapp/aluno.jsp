@@ -27,7 +27,7 @@
 	<div class="container py-4">
 		<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow">
 			<div class="container-fluid py-5">
-				<h1 class="display-5 fw-bold">Manutenï¿½ï¿½o de Aluno</h1>
+				<h1 class="display-5 fw-bold">Manutenção de Aluno</h1>
 		        <div class="d-flex gap-2 justify-content-center py-2">
 					<form action="aluno" method="post" class="row g-3 mt-3">
 						<label for="CPF" class="form-label col-md-1">CPF:</label>
@@ -59,11 +59,15 @@
 								value='<c:out value="${aluno.dataNascimento }"></c:out>'>
 						</div>
 						<label for="telefoneContato" class="form-label col-md-1">Tel Contato:</label>
-						<div class="col-md-3">		
+						<div class="col-md-2">		
 							<input class="form-control" type="text"
 								id="telefoneContato" name="telefoneContato"
 								placeholder="Telefone Contato"
 								value='<c:out value="${aluno.telefoneContato }"></c:out>'>
+						</div>
+						<div class="col-md-1">
+							<input type="submit" id="botao" name="botao" class="btn btn-primary"
+						value="Telefone">
 						</div>
 						<label for="emailPessoal" class="form-label col-md-1">E-mail Pessoal:</label>
 						<div class="col-md-3">	
@@ -78,25 +82,25 @@
 								placeholder="E-mail Corporativo"
 								value='<c:out value="${aluno.emailCorporativo }"></c:out>'>
 						</div>
-						<label for="dataConclusao2Grau" class="form-label col-md-1">Data Conclusao 2Grau:</label>
+						<label for="dataConclusao2Grau" class="form-label col-md-1">Data Conclusão 2Grau:</label>
 						<div class="col-md-3">		
 							<input class="form-control" type="date"
 								id="dataConclusao2Grau" name="dataConclusao2Grau"
 								placeholder="Data Conclusao 2 Grau"
 								value='<c:out value="${aluno.dataConclusao2Grau }"></c:out>'>
 						</div>
-						<label for="nome" class="form-label col-md-1">Instituicao Conclusao 2Grau:</label>
+						<label for="nome" class="form-label col-md-1">Instituição Conclusão 2Grau:</label>
 						<div class="col-md-3">		
 							<input class="form-control" type="text"
 								id="instituicaoConclusao2Grau" name="instituicaoConclusao2Grau"
-								placeholder="Instituicao Conclusao 2 Grau"
+								placeholder="Instituição Conclusao 2 Grau"
 								value='<c:out value="${aluno.instituicaoConclusao2Grau }"></c:out>'>
 						</div>
-						<label for="pontuacaoVestibular" class="form-label col-md-1">Pontuaï¿½ï¿½o Vestibular:</label> 
+						<label for="pontuacaoVestibular" class="form-label col-md-1">Pontuação Vestibular:</label> 
 						<div class="col-md-3">		
 							<input class="form-control" type="text"
 								id="pontuacaoVestibular" name="pontuacaoVestibular"
-								placeholder="Pontuaï¿½ï¿½o Vestibular"
+								placeholder="Pontuação Vestibular"
 								value='<c:out value="${aluno.pontuacaoVestibular }"></c:out>'
 								onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode == 46;">
 						</div>
@@ -104,7 +108,7 @@
 						<div class="col-md-3">		
 							<input class="form-control" type="text"
 								id="posicaoVestibular" name="posicaoVestibular"
-								placeholder="Posicao Vestibular"
+								placeholder="Posição Vestibular"
 								value='<c:out value="${aluno.posicaoVestibular }"></c:out>'>
 						</div>
 						<label for="anoIngresso" class="form-label col-md-1">Ano Ingresso:</label>
@@ -129,11 +133,11 @@
 								readonly onkeypress="showAlert()">
 						</div>
 						<label for="semestreAnoLimiteGraduacao" class="form-label col-md-1">
-								Limite Graduaï¿½ï¿½o:</label> 
+								Limite Graduação:</label> 
 						<div class="col-md-3">		
 							<input class="form-control" type="date"
 								id="semestreAnoLimiteGraduacao" name="semestreAnoLimiteGraduacao"
-								placeholder="Semestre Limite Graduaï¿½ï¿½o"
+								placeholder="Semestre Limite Graduação"
 								value='<c:out value="${aluno.semestreAnoLimiteGraduacao }"></c:out>'
 								readonly onkeypress="showAlert()">
 						</div>
