@@ -5,58 +5,71 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<link rel="stylesheet" href="./css/styles.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <title>Professor</title>
 </head>
 <body>
 	<div>
-		<jsp:include page="menu.jsp" />
+		<jsp:include page="headerSecretaria.jsp" />
 	</div>
 	<br />
-	<div align="center" class="container">
-		<form action="professor" method="post">
-			<p class="title">
-				<b>Manutenção Professor</b>
-			</p>
-
-			<table>
-				<tr>
-					<td colspan="3"><label for="data">Código:</label> <input
-						class="input_data_id" type="number" min="0" step="1" id="codigo"
-						name="codigo" placeholder="Codigo Conteudo"
-						value='<c:out value="${professor.codigo }"></c:out>'
-						style="width: 80px;"></td>
-					<td><input type="submit" id="botao" name="botao"
-						value="Buscar"></td>
-				</tr>
-				<tr>
-					<td colspan="4"><label for="data">Nome:</label><input
-						class="input_data" type="text" id="nome" name="nome"
-						placeholder="Nome"
-						value='<c:out value="${professor.nome }"></c:out>'></td>
-				</tr>
-				<tr>
-					<td colspan="4"><label for="data">Titulação:</label><input
-						class="input_data" type="text" id="titulacao" name="titulacao"
-						placeholder="Titulacao"
-						value='<c:out value="${professor.titulacao }"></c:out>'></td>
-				</tr>
-			
-			</table>
-			<table>
-				<tr>
-					<td><input type="submit" id="botao" name="botao"
-						value="Cadastrar"></td>
-					<td><input type="submit" id="botao" name="botao"
-						value="Alterar"></td>
-					<td><input type="submit" id="botao" name="botao"
-						value="Excluir"></td>
-					<td><input type="submit" id="botao" name="botao"
-						value="Listar"></td>
-					<td><input type="submit" id="botao" name="botao"
-						value="Limpar"></td>
-				</tr></table>
-		</form>
+	<div class="container py-4">
+		<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow">
+			<div class="container-fluid py-5">
+				<h1 class="display-5 fw-bold">Manutenção de Profesor</h1>
+		        <div class="d-flex gap-2 justify-content-center py-2">
+					<form action="professor" method="post" class="row g-3 mt-3">
+						<label for="data" class="form-label col-md-1">Código:</label> 
+						<div class="col-md-2">	
+							<input
+							class="form-control" type="number" min="0" step="1" id="codigo"
+							name="codigo" placeholder="Codigo Conteudo"
+							value='<c:out value="${professor.codigo }"></c:out>'>
+						</div>
+						<div class="col-md-1">	
+							<input type="submit" id="botao" name="botao" class="btn btn-primary mb-3"
+							value="Buscar">
+						</div>
+						<label for="data" class="form-label col-md-1">Nome:</label>
+						<div class="col-md-3">	
+							<input
+							class="form-control" type="text" id="nome" name="nome"
+							placeholder="Nome"
+							value='<c:out value="${professor.nome }"></c:out>'>
+						</div>
+						<label for="data" class="form-label col-md-1">Titulação:</label>
+						<div class="col-md-3">	
+							<input
+							class="form-control" type="text" id="titulacao" name="titulacao"
+							placeholder="Titulacao"
+							value='<c:out value="${professor.titulacao }"></c:out>'>
+						</div>
+						<br>
+						<div class="col-md-2 d-grid text-center">
+							<input type="submit" id="botao" name="botao"
+								value="Cadastrar" class="btn btn-success">
+						</div>
+						<div class="col-md-2 d-grid text-center">
+							<input type="submit" id="botao" name="botao"
+								value="Alterar" class="btn btn-success">
+						</div>
+						<div class="col-md-2 d-grid text-center">
+							<input type="submit" id="botao" name="botao"
+								value="Excluir" class="btn btn-danger">
+						</div>
+						<div class="col-md-2 d-grid text-center"></div>
+						<div class="col-md-2 d-grid text-center">
+							<input type="submit" id="botao" name="botao"
+								value="Listar" class="btn btn-primary">
+						</div>
+						<div class="col-md-2 d-grid text-center">
+							<input type="submit" id="botao" name="botao"
+								value="Limpar" class="btn btn-secondary">
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
 	</div>
 	<br />
 	<div align="center">
@@ -75,11 +88,10 @@
 			</h3>
 		</c:if>
 	</div>
-
 	<br />
-	<div align="center">
+	<div class="container py-4 text-center d-flex justify-content-center" align="center">
 		<c:if test="${not empty professores }">
-			<table class="table_round">
+			<table class="table table-striped">
 				<thead>
 					<tr>
 						<th>Codigo</th>
@@ -87,7 +99,7 @@
 						<th>Titulação</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody class="table-group-divider">
 					<c:forEach var="p" items="${professores }">
 						<tr>
 							<td><c:out value="${p.codigo }" /></td>
@@ -95,9 +107,7 @@
 							<td><c:out value="${p.titulacao }" /></td>
 						</tr>
 					</c:forEach>
-
 				</tbody>
-
 			</table>
 		</c:if>
 	</div>

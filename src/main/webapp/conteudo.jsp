@@ -5,9 +5,8 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<link rel="stylesheet" href="./css/styles.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <title>Conteudo</title>
-
 <script>
 	function validarBusca() {
 		var cpf = document.getElementById("codigo").value;
@@ -22,72 +21,81 @@
 </head>
 <body>
 	<div>
-		<jsp:include page="menu.jsp" />
+		<jsp:include page="headerProfessor.jsp" />
 	</div>
-	<br />
+	<div class="container py-4">
+		<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow">
+			<div class="container-fluid py-5">
+				<h1 class="display-5 fw-bold">Manutenção de Conteudos</h1>
+		        <div class="d-flex gap-2 justify-content-center py-2">
+		        	<form action="conteudo" method="post" class="row g-3 mt-3">
+        				<label for="data" class="form-label col-md-1">Código Conteudo:</label>
+        				<div class="col-md-1">
+	        				<input class="form-control" type="number" min="0" step="1" id="codigo"
+							name="codigo" placeholder="Codigo Conteudo"
+							value='<c:out value="${conteudo.codigo }"></c:out>'
+							style="width: 80px;">
+						</div> 
+						<div class="col-md-1">
+							<input type="submit" id="botao" name="botao"
+							value="Buscar" onclick="return validarBusca()" class="btn btn-primary mb-3">
+						</div>
+						<label for="data" class="form-label col-md-1">Nome :</label> 
+        				<div class="col-md-4">						
+							<input class="form-control" type="text" id="nome" name="nome"
+								placeholder="Nome"
+								value='<c:out value="${conteudo.nome }"></c:out>'>
+						</div>
+						<label for="data" class="form-label col-md-1">Disciplina:</label>
+        				<div class="col-md-3">	 
+							<select class="form-select" id="disciplina" name="disciplina">
+								<option value="0">Escolha uma Disciplina</option>
+								<c:forEach var="d" items="${disciplinas }">
+									<c:if
+										test="${(empty conteudo) || (d.codigo ne conteudo.disciplina.codigo) }">
+										<option value="${d.codigo }"><c:out value="${d }" /></option>
+									</c:if>
+									<c:if test="${d.codigo eq conteudo.disciplina.codigo }">
+										<option value="${d.codigo }" selected="selected"><c:out
+												value="${d }" /></option>
+									</c:if>
+								</c:forEach>
+							</select>
+						</div>
+						<label for="data" class="form-label col-md-1">Descrição:</label> 
+						<div class="col-md-11">
+							<textarea
+								class="form-control col-md-1" type="text" id="descricao" name="descricao"
+								placeholder="Descrição"
+								value='<c:out value="${conteudo.descricao }"></c:out>'></textarea>
+						</div>
+						<div class="col-md-2 d-grid text-center">
+							<input type="submit" id="botao" name="botao" class="btn btn-success"
+								value="Cadastrar">
+						</div>
+						<div class="col-md-2 d-grid text-center">
+							<input type="submit" id="botao" name="botao" class="btn btn-success"
+								value="Alterar">
+						</div>
+						<div class="col-md-2 d-grid text-center">
+							<input type="submit" id="botao" name="botao" class="btn btn-danger"
+								value="Excluir">
+						</div>
+						<div class="col-md-2 d-grid text-center"></div>
+						<div class="col-md-2 d-grid text-center">
+							<input type="submit" id="botao" name="botao"
+								value="Listar" class="btn btn-primary">
+						</div>
+						<div class="col-md-2 d-grid text-center">
+							<input type="submit" id="botao" name="botao"
+							value="Limpar" class="btn btn-secondary">
+						</div>
+		        	</form>
+	      		</div>
+		    </div>
+		</div>
+	</div>
 	<div align="center" class="container">
-		<form action="conteudo" method="post">
-			<p class="title">
-				<b>Manutenção de Conteudo</b>
-			</p>
-			<table>
-				<tr>
-					<td colspan="3"><label for="data">Código Conteudo:</label> <input
-						class="input_data_id" type="number" min="0" step="1" id="codigo"
-						name="codigo" placeholder="Codigo Conteudo"
-						value='<c:out value="${conteudo.codigo }"></c:out>'
-						style="width: 80px;"></td>
-					<td><input type="submit" id="botao" name="botao"
-						value="Buscar" onclick="return validarBusca()"></td>
-				</tr>
-
-				<tr>
-					<td colspan="4"><label for="data">Nome :</label> <input
-						class="input_data" type="text" id="nome" name="nome"
-						placeholder="Nome"
-						value='<c:out value="${conteudo.nome }"></c:out>'></td>
-				</tr>
-
-				<tr>
-					<td colspan="4"><label for="data">Descrição:</label> <input
-						class="input_data" type="text" id="descricao" name="descricao"
-						placeholder="Descrição"
-						value='<c:out value="${conteudo.descricao }"></c:out>'></td>
-				</tr>
-				<tr>
-					<td colspan="4"><label for="data">Disciplina:</label> <select
-						class="input_data" id="disciplina" name="disciplina">
-							<option value="0">Escolha uma Disciplina</option>
-							<c:forEach var="d" items="${disciplinas }">
-								<c:if
-									test="${(empty conteudo) || (d.codigo ne conteudo.disciplina.codigo) }">
-									<option value="${d.codigo }"><c:out value="${d }" /></option>
-								</c:if>
-								<c:if test="${d.codigo eq conteudo.disciplina.codigo }">
-									<option value="${d.codigo }" selected="selected"><c:out
-											value="${d }" /></option>
-								</c:if>
-							</c:forEach>
-					</select></td>
-				</tr>
-
-			</table>
-
-			<table>
-				<tr>
-					<td><input type="submit" id="botao" name="botao"
-						value="Cadastrar"></td>
-					<td><input type="submit" id="botao" name="botao"
-						value="Alterar"></td>
-					<td><input type="submit" id="botao" name="botao"
-						value="Excluir"></td>
-					<td><input type="submit" id="botao" name="botao"
-						value="Listar"></td>
-						<td><input type="submit" id="botao" name="botao"
-						value="Limpar"></td>
-				</tr>
-			</table>
-		</form>
 	</div>
 	<br />
 	<div align="center">
@@ -106,9 +114,9 @@
 		</c:if>
 	</div>
 	<br />
-	<div align="center">
+	<div class="container py-4 text-center d-flex justify-content-center" align="center">
 		<c:if test="${not empty conteudos}">
-			<table class="table_round">
+			<table class="table table-striped">
 				<thead>
 					<tr>
 						<th class="titulo-tabela" colspan="4"
@@ -120,10 +128,9 @@
 						<th>Nome</th>
 						<th>Descricao</th>
 						<th>Disciplina</th>
-
 					</tr>
 				</thead>
-				<tbody>
+				<tbody class="table-group-divider">
 					<c:forEach var="c" items="${conteudos}">
 						<tr>
 							<td><c:out value="${c.codigo}" /></td>
@@ -135,7 +142,6 @@
 				</tbody>
 			</table>
 		</c:if>
-
 	</div>
 </body>
 </html>
