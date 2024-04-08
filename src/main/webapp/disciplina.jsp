@@ -40,7 +40,7 @@
 							value='<c:out value="${disciplina.codigo }"></c:out>'>
 						</div>
 						<div class="col-md-1">	
-							<input type="submit" id="botao" name="botao"
+							<input type="submit" id="botao" name="botao" class="btn btn-primary"
 								value="Buscar" onclick="return validarBusca()">
 						</div>
 						<label for="data" class="form-label col-md-1">Nome :</label> 

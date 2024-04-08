@@ -6,7 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Telefone{
-	int codigo; 
 	Aluno aluno;
 	String numero;
 	String tipo;

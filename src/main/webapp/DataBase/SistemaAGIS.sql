@@ -1,10 +1,8 @@
 USE master
 CREATE DATABASE SistemaAGIS
---DROP DATABASE SistemaAGIS 
 GO
 USE SistemaAGIS 
 GO
--- Tabela Curso
 CREATE TABLE curso (
 codigo					INT CHECK (codigo >= 0 AND codigo <= 100)		NOT NULL,
 nome					VARCHAR(100)									NOT NULL,
@@ -15,8 +13,7 @@ turno					VARCHAR(20)										NOT NULL
 PRIMARY KEY  (codigo)
 )
 GO
-
-CREATE DROP TABLE aluno (
+CREATE TABLE aluno (
     CPF							CHAR(11) UNIQUE,
     nome						VARCHAR(100),
     nomeSocial					VARCHAR(100),
@@ -37,7 +34,6 @@ CREATE DROP TABLE aluno (
 	FOREIGN KEY (curso) REFERENCES curso(codigo)
 )
 GO
-
 CREATE TABLE professor (
 codigo    INT           NOT NULL,
 nome      VARCHAR(100)  NOT NULL,
@@ -45,8 +41,6 @@ titulacao  VARCHAR(50)  NOT NULL
 PRIMARY KEY (codigo)
 )
 GO
-
--- Tabela Disciplina
 CREATE TABLE disciplina (
 codigo				INT IDENTITY (1001,1)		NOT NULL,
 nome				VARCHAR(100)				NOT NULL,
@@ -61,17 +55,13 @@ FOREIGN KEY (codigoProfessor) REFERENCES professor(codigo),
 FOREIGN KEY (codigoCurso) REFERENCES curso(codigo)
 )
 GO
-
--- Tabela Telefones
 CREATE TABLE telefone (
 aluno			CHAR(11),
-numero  		CHAR(12)
-PRIMARY KEY (numero)
+numero  		CHAR(12),
+tipo			VARCHAR(100)
+PRIMARY KEY (aluno, numero)
 FOREIGN KEY (aluno) REFERENCES aluno(CPF)
 )
-GO
-
--- Tabela Matricula
 GO
 CREATE TABLE matricula (
 codigo				INT			NOT NULL,
@@ -81,13 +71,6 @@ semestre        	INT	NOT NULL
 PRIMARY KEY (codigo)
 FOREIGN KEY (codigoAluno) REFERENCES aluno(CPF),
 )
-GO
-
-SELECT * FROM disciplina
-
-SELECT d.codigo, d.nome AS nomeDisciplina, d.horasSemanais, SUBSTRING(d.horarioInicio, 1, 5) AS horarioInicio, d.semestre, d.diaSemana FROM disciplina d JOIN matriculaDisciplina m ON m.codigoDisciplina = d.codigo 
-WHERE CodigoMatricula = 3
-
 GO
 CREATE TABLE matriculaDisciplina (
 CodigoMatricula				    INT 			 NOT NULL,
@@ -99,7 +82,6 @@ FOREIGN KEY (CodigoMatricula) REFERENCES matricula(codigo),
 FOREIGN KEY (codigoDisciplina) REFERENCES disciplina(codigo)
 )
 GO
-
 CREATE TABLE conteudo(
 codigo				INT			   NOT NULL,
 nome				VARCHAR(100)   NOT NULL,

@@ -1,8 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -61,15 +59,11 @@
 								value='<c:out value="${aluno.dataNascimento }"></c:out>'>
 						</div>
 						<label for="telefoneContato" class="form-label col-md-1">Tel Contato:</label>
-						<div class="col-md-2">		
+						<div class="col-md-3">		
 							<input class="form-control" type="text"
 								id="telefoneContato" name="telefoneContato"
 								placeholder="Telefone Contato"
 								value='<c:out value="${aluno.telefoneContato }"></c:out>'>
-						</div>
-						<div class="col-md-1">
-							<input type="submit" id="botao" name="botao" class="btn btn-primary"
-						value="Telefone">
 						</div>
 						<label for="emailPessoal" class="form-label col-md-1">E-mail Pessoal:</label>
 						<div class="col-md-3">	
@@ -95,14 +89,14 @@
 						<div class="col-md-3">		
 							<input class="form-control" type="text"
 								id="instituicaoConclusao2Grau" name="instituicaoConclusao2Grau"
-								placeholder="Instituicao Conclusao 2 Grau"
+								placeholder="Instituição Conclusao 2 Grau"
 								value='<c:out value="${aluno.instituicaoConclusao2Grau }"></c:out>'>
 						</div>
 						<label for="pontuacaoVestibular" class="form-label col-md-1">Pontuação Vestibular:</label> 
 						<div class="col-md-3">		
 							<input class="form-control" type="text"
 								id="pontuacaoVestibular" name="pontuacaoVestibular"
-								placeholder="Pontuacao Vestibular"
+								placeholder="Pontuação Vestibular"
 								value='<c:out value="${aluno.pontuacaoVestibular }"></c:out>'
 								onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode == 46;">
 						</div>
@@ -110,7 +104,7 @@
 						<div class="col-md-3">		
 							<input class="form-control" type="text"
 								id="posicaoVestibular" name="posicaoVestibular"
-								placeholder="Posicao Vestibular"
+								placeholder="Posição Vestibular"
 								value='<c:out value="${aluno.posicaoVestibular }"></c:out>'>
 						</div>
 						<label for="anoIngresso" class="form-label col-md-1">Ano Ingresso:</label>
@@ -139,7 +133,7 @@
 						<div class="col-md-3">		
 							<input class="form-control" type="date"
 								id="semestreAnoLimiteGraduacao" name="semestreAnoLimiteGraduacao"
-								placeholder="Semestre Limite Graduacao"
+								placeholder="Semestre Limite Graduação"
 								value='<c:out value="${aluno.semestreAnoLimiteGraduacao }"></c:out>'>
 						</div>
 						<label for="data" class="form-label col-md-1">Curso:</label>
@@ -213,7 +207,7 @@
 			<table class="table table-striped">
 				<thead>
 					<tr>
-						<th class="titulo-tabela" colspan="17"
+						<th class="titulo-tabela" colspan="16"
 							style="text-align: center; font-size: 23px;">Lista de Alunos</th>
 					</tr>
 					<tr>
@@ -233,7 +227,6 @@
 						<th>Sem. Limite</th>
 						<th>RA</th>
 						<th>Curso</th>
-						<th>Telefone</th>
 					</tr>
 				</thead>
 				<tbody class="table-group-divider">
@@ -244,7 +237,7 @@
 							<td><c:out value="${a.nomeSocial }" /></td>
 							<td><c:out value="${a.dataNascimento }" /></td>
 							<td>
-								<button onclick="window.location.href='telefone?aluno=${a.CPF}'">Telefones</button>
+								<button onclick="window.location.href='telefone?aluno=${a.CPF}'" class="btn btn-primary">Telefones</button>
 							</td>
 							<td><c:out value="${a.emailPessoal }" /></td>
 							<td><c:out value="${a.emailCorporativo }" /></td>
@@ -257,8 +250,6 @@
 							<td><c:out value="${a.semestreAnoLimiteGraduacao }" /></td>
 							<td><c:out value="${a.RA }" /></td>
 							<td><c:out value="${a.curso.nome }" /></td>
-							
-
 						</tr>
 					</c:forEach>
 				</tbody>

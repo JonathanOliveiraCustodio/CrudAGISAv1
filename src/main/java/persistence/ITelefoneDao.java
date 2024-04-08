@@ -1,11 +1,13 @@
 package persistence;
 
 import java.sql.SQLException;
+
+import model.Aluno;
 import model.Telefone;
 
 public interface ITelefoneDao {
-	
-	public String iudTelefone (String acao, Telefone t) throws SQLException, ClassNotFoundException;
+
+	String iudTelefone(String acao, Telefone t, Aluno a) throws SQLException, ClassNotFoundException;
 	
 
 }
