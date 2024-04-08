@@ -83,12 +83,17 @@ FOREIGN KEY (codigoAluno) REFERENCES aluno(CPF),
 )
 GO
 
+SELECT * FROM disciplina
+
+SELECT d.codigo, d.nome AS nomeDisciplina, d.horasSemanais, SUBSTRING(d.horarioInicio, 1, 5) AS horarioInicio, d.semestre, d.diaSemana FROM disciplina d JOIN matriculaDisciplina m ON m.codigoDisciplina = d.codigo 
+WHERE CodigoMatricula = 3
+
 GO
 CREATE TABLE matriculaDisciplina (
 CodigoMatricula				    INT 			 NOT NULL,
 codigoDisciplina				INT				 NOT NULL,
 situacao						VARCHAR(20)		 NOT NULL,
-notaFinal						DECIMAL	(3,2)	 NOT NULL
+notaFinal						DECIMAL	(4,2)	 NOT NULL
 PRIMARY KEY (CodigoMatricula,codigoDisciplina)
 FOREIGN KEY (CodigoMatricula) REFERENCES matricula(codigo),
 FOREIGN KEY (codigoDisciplina) REFERENCES disciplina(codigo)
@@ -118,8 +123,13 @@ VALUES
 (8, '98765432198', '2021-01-1', 3),
 (9, '98765432198', '2021-07-28', 4);
 
-SELECT * FROM matricula;
-SELECT * FROM matricula;
+SELECT * FROM aluno;
+INSERT INTO matriculaDisciplina VALUES (15, 1005, 'LOL', 9.00)
+
+
+SELECT d.codigo, d.nome AS nomeDisciplina, d.horasSemanais, SUBSTRING(d.horarioInicio, 1, 5) AS horarioInicio, d.semestre, d.diaSemana
+FROM disciplina d WHERE d.codigoCurso = 1
+AND d.codigo NOT IN (SELECT codigoDisciplina FROM matriculaDisciplina WHERE situacao = 'Aprovado' AND CodigoMatricula IN (SELECT codigo FROM matricula WHERE codigoAluno = '09129892031'))
 
 
 -- Inserindo registros na tabela matriculaDisciplina
@@ -163,6 +173,7 @@ INSERT INTO professor VALUES
 
 INSERT INTO disciplina (nome, horasSemanais, horarioInicio, semestre, diaSemana, codigoProfessor, codigoCurso)
 VALUES
+('Matemática2', 4, '08:00', 1, 'Segunda-feira', 1, 1),
 ('Matemática', 4, '08:00', 1, 'Segunda-feira', 1, 10),
 ('Física', 3, '10:00', 1, 'Terça-feira', 1, 8),
 ('Química', 3, '13:00', 2, 'Quarta-feira', 3, 6),
@@ -204,9 +215,13 @@ INSERT INTO conteudo VALUES
     (19, 'Genética', 'Estudo dos genes e hereditariedade', 1003),
     (20, 'Renascimento', 'Movimento cultural e artístico do século XVI', 1004);
 
+SELECT * FROM curso
 
 CREATE VIEW v_listarCurso AS
 SELECT codigo, nome, cargaHoraria, sigla, ultimaNotaENADE, turno FROM curso
+
+CREATE VIEW v_periodoMatricula AS
+SELECT TOP 1 periodo_matricula_inicio, periodo_matricula_fim FROM curso ORDER BY codigo ASC
 
 CREATE VIEW v_listarAluno AS
 SELECT a.CPF, a.nome, a.nomeSocial, a.dataNascimento, a.telefoneContato,
@@ -641,9 +656,114 @@ BEGIN
     END
 END
 
+CREATE PROCEDURE sp_u_periodomatricula 
+ @periodo_inicio DATE, 
+ @periodo_fim DATE,
+ @saida VARCHAR(100) OUTPUT
+AS
+BEGIN
+    IF (@periodo_inicio IS NOT NULL AND @periodo_fim IS NOT NULL)
+    BEGIN
+        UPDATE curso SET periodo_matricula_inicio = @periodo_inicio, periodo_matricula_fim = @periodo_fim
+        SET @saida = 'Período de matrícula alterado com sucesso'
+    END
+    ELSE
+    BEGIN
+        RAISERROR('Datas inválidas', 16, 1)
+        RETURN
+    END
+END
+
+DECLARE @out1 VARCHAR(100)
+EXEC sp_u_periodomatricula '01-01-2024', '22-01-2024', @out1 OUTPUT
+PRINT @out1
+
+CREATE PROCEDURE sp_u_periodomatricula 
+ @periodo_inicio DATE, 
+ @periodo_fim DATE,
+ @saida VARCHAR(100) OUTPUT
+AS
+BEGIN
+    IF (@periodo_inicio IS NOT NULL AND @periodo_fim IS NOT NULL AND @periodo_fim > @periodo_inicio)
+    BEGIN
+        UPDATE curso SET periodo_matricula_inicio = @periodo_inicio, periodo_matricula_fim = @periodo_fim
+        SET @saida = 'Período de matrícula alterado com sucesso'
+    END
+    ELSE
+    BEGIN
+        RAISERROR('Datas inválidas', 16, 1)
+        RETURN
+    END
+END
+
+DECLARE @out1 VARCHAR(100)
+EXEC sp_u_periodomatricula '01-01-2024', '22-01-2024', @out1 OUTPUT
+PRINT @out1
+
+
 -- Teste da Procedure
 DECLARE @out1 VARCHAR(100)
 EXEC sp_iud_conteudo 'D', 31, 'Nome do Conteúdo ALterado', 'Descrição do Conteúdo', 1003, @out1 OUTPUT
 PRINT @out1
 
+CREATE PROCEDURE sp_nova_matricula
+	@codigo_aluno	CHAR(11),
+	@saida VARCHAR(100) OUTPUT
+AS
+BEGIN
+	DECLARE @semestre INT
+	SELECT @semestre = MAX(semestre) FROM matricula WHERE codigoAluno = @codigo_aluno
+	IF @semestre IS NULL
+	BEGIN
+		SET @semestre = 1
+	END
+	ELSE
+	BEGIN
+		SET @semestre = @semestre + 1
+	END
+	DECLARE @codigo INT
+	SELECT @codigo = MAX(codigo) FROM matricula
+	SET @codigo = @codigo + 1
 
+	INSERT INTO matricula VALUES (@codigo, @codigo_aluno, GETDATE(), @semestre)
+END
+
+DECLARE @out1 VARCHAR(100)
+EXEC sp_nova_matricula '55312103020', @out1 OUTPUT
+PRINT @out1
+
+SELECT * FROM matricula WHERE codigoAluno = '39112829072'
+
+CREATE PROCEDURE sp_matricular_disciplina
+	@codigo_disciplina	INT,
+	@codigo_matricula	INT,
+	@saida VARCHAR(100) OUTPUT
+AS
+BEGIN
+	DECLARE @horario_inicio INT, @horas_semanais INT, @dia_semana VARCHAR(100)
+	SELECT @horario_inicio = (CAST(SUBSTRING(horarioInicio, 1, CHARINDEX(':', horarioInicio) - 1) AS INT) + 1) FROM disciplina WHERE codigo = @codigo_disciplina
+	SELECT @horas_semanais = horasSemanais FROM disciplina WHERE codigo = @codigo_disciplina
+	SELECT @dia_semana = diaSemana FROM disciplina WHERE codigo = @codigo_disciplina
+
+	DECLARE @conflito INT
+	SELECT @conflito = COUNT(d.codigo) FROM matriculaDisciplina m JOIN disciplina d ON m.codigoDisciplina = d.codigo WHERE m.CodigoMatricula = @codigo_matricula AND d.diaSemana = @dia_semana AND
+	((CAST(SUBSTRING(d.horarioInicio, 1, CHARINDEX(':', d.horarioInicio) - 1) AS INT) >= @horario_inicio AND (@horario_inicio + @horas_semanais) >= CAST(SUBSTRING(d.horarioInicio, 1, CHARINDEX(':', d.horarioInicio) - 1) AS INT)) OR
+	((CAST(SUBSTRING(d.horarioInicio, 1, CHARINDEX(':', d.horarioInicio) - 1) AS INT) + d.horasSemanais) >= @horario_inicio AND (@horario_inicio + @horas_semanais) >= (CAST(SUBSTRING(d.horarioInicio, 1, CHARINDEX(':', d.horarioInicio) - 1) AS INT) + d.horasSemanais)) OR
+	(CAST(SUBSTRING(d.horarioInicio, 1, CHARINDEX(':', d.horarioInicio) - 1) AS INT) <= @horario_inicio AND (@horario_inicio + @horas_semanais) <= (CAST(SUBSTRING(d.horarioInicio, 1, CHARINDEX(':', d.horarioInicio) - 1) AS INT) + d.horasSemanais)))
+	
+	IF @conflito > 0
+	BEGIN
+		RAISERROR('Um ou mais horários de disciplinas apresentam conflitos', 16, 1)
+        RETURN
+	END
+	ELSE
+	BEGIN
+		INSERT INTO matriculaDisciplina VALUES (@codigo_matricula, @codigo_disciplina, 'Cursando', 0.0)
+	END
+END
+
+DECLARE @out1 BIT
+EXEC sp_matricular_disciplina 1004, 1, @out1 OUTPUT
+PRINT @out1
+
+SELECT * FROM matriculaDisciplina 

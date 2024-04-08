@@ -7,7 +7,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-<title>Matricula</title>
+<title>Horários</title>
 </head>
 <script>
 	function validarBusca() {
@@ -27,10 +27,9 @@
 	<div class="container py-4">
 		<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow">
 			<div class="container-fluid py-5">
-				<h1 class="display-5 fw-bold">Matrícula</h1>
+				<h1 class="display-5 fw-bold">Consulta de Horários</h1>
 		        <div class="d-flex gap-2 justify-content-center py-2">
-		       	 <c:if test="${periodoValido == true}">
-		        	<form action="matricula" method="post" class="row g-3 mt-3">
+		        	<form action="horarios" method="post" class="row g-3 mt-3">
 		        		<div class="col-md-1"></div>
 			        	<label for="CPF" class="form-label col-md-1">RA:</label>
 			        	<div class="col-md-2">
@@ -69,12 +68,11 @@
 								<tbody>
 									<c:forEach var="disciplina" items="${disciplinas.get('Segunda-feira')}">
 										<tr>
-											
-											<td><div class="col py-2 px-1 border border-secondary rounded mb-1 bg-secondary-subtle text-secondary-emphasis"><input type="checkbox" name="disciplinaCheckbox" id="${disciplina.codigo}"
-												 ${disciplinasMatriculadas.contains(disciplina.codigo) ? 'checked disabled' : ''} value="${disciplina.codigo}">${disciplina.codigo} - ${disciplina.nome}
+											<td><div class="col py-2 px-1 border border-secondary rounded mb-1 bg-secondary-subtle text-secondary-emphasis">
+												${disciplina.codigo} - ${disciplina.nome}
 												<br>
 												${disciplina.horaInicio} - ${disciplina.horasSemanais} horas
-												<brs>
+												<br>
 												${disciplina.semestre}º semestre
 											</div></td>
 										</tr>
@@ -93,9 +91,8 @@
 								<tbody>
 									<c:forEach var="disciplina" items="${disciplinas.get('Terça-feira')}">
 										<tr>
-											
-											<td><div class="col py-2 px-1 border border-secondary rounded mb-1 bg-secondary-subtle text-secondary-emphasis"><input type="checkbox" name="disciplinaCheckbox"
-												 ${disciplinasMatriculadas.contains(disciplina.codigo) ? 'checked disabled' : ''} id="${disciplina.codigo}" value="${disciplina.codigo}">${disciplina.codigo} - ${disciplina.nome}
+											<td><div class="col py-2 px-1 border border-secondary rounded mb-1 bg-secondary-subtle text-secondary-emphasis">
+												${disciplina.codigo} - ${disciplina.nome}
 												<br>
 												${disciplina.horaInicio} - ${disciplina.horasSemanais} horas
 												<br>
@@ -117,9 +114,8 @@
 								<tbody>
 									<c:forEach var="disciplina" items="${disciplinas.get('Quarta-feira')}">
 										<tr>
-											
-											<td><div class="col py-2 px-1 border border-secondary rounded mb-1 bg-secondary-subtle text-secondary-emphasis"><input type="checkbox" name="disciplinaCheckbox"
-												 ${disciplinasMatriculadas.contains(disciplina.codigo) ? 'checked disabled' : ''} id="${disciplina.codigo}" value="${disciplina.codigo}">${disciplina.codigo} - ${disciplina.nome}
+											<td><div class="col py-2 px-1 border border-secondary rounded mb-1 bg-secondary-subtle text-secondary-emphasis">
+												${disciplina.codigo} - ${disciplina.nome}
 												<br>
 												${disciplina.horaInicio} - ${disciplina.horasSemanais} horas
 												<br>
@@ -141,9 +137,8 @@
 								<tbody>
 									<c:forEach var="disciplina" items="${disciplinas.get('Quinta-feira')}">
 										<tr>
-											
-											<td><div class="col py-2 px-1 border border-secondary rounded mb-1 bg-secondary-subtle text-secondary-emphasis"><input type="checkbox" name="disciplinaCheckbox"
-												 ${disciplinasMatriculadas.contains(disciplina.codigo) ? 'checked disabled' : ''} id="${disciplina.codigo}" value="${disciplina.codigo}">${disciplina.codigo} - ${disciplina.nome}
+											<td><div class="col py-2 px-1 border border-secondary rounded mb-1 bg-secondary-subtle text-secondary-emphasis">
+												${disciplina.codigo} - ${disciplina.nome}
 												<br>
 												${disciplina.horaInicio} - ${disciplina.horasSemanais} horas
 												<br>
@@ -165,9 +160,8 @@
 								<tbody>
 									<c:forEach var="disciplina" items="${disciplinas.get('Sexta-feira')}">
 										<tr>
-											
-											<td><div class="col py-2 px-1 border border-secondary rounded mb-1 bg-secondary-subtle text-secondary-emphasis"><input type="checkbox" name="disciplinaCheckbox"
-												 ${disciplinasMatriculadas.contains(disciplina.codigo) ? 'checked disabled' : ''} id="${disciplina.codigo}" value="${disciplina.codigo}">${disciplina.codigo} - ${disciplina.nome}
+											<td><div class="col py-2 px-1 border border-secondary rounded mb-1 bg-secondary-subtle text-secondary-emphasis">
+												${disciplina.codigo} - ${disciplina.nome}
 												<br>
 												${disciplina.horaInicio} - ${disciplina.horasSemanais} horas
 												<br>
@@ -189,9 +183,8 @@
 								<tbody>
 									<c:forEach var="disciplina" items="${disciplinas.get('Sábado')}">
 										<tr>
-											
-											<td><div class="col py-2 px-1 border border-secondary rounded mb-1 bg-secondary-subtle text-secondary-emphasis"><input type="checkbox" name="disciplinaCheckbox"
-												 ${disciplinasMatriculadas.contains(disciplina.codigo) ? 'checked disabled' : ''} id="${disciplina.codigo}" value="${disciplina.codigo}">${disciplina.codigo} - ${disciplina.nome}
+											<td><div class="col py-2 px-1 border border-secondary rounded mb-1 bg-secondary-subtle text-secondary-emphasis">
+												${disciplina.codigo} - ${disciplina.nome}
 												<br>
 												${disciplina.horaInicio} - ${disciplina.horasSemanais} horas
 												<br>
@@ -202,20 +195,9 @@
 								</tbody>
 							</table>
 						</div>
-						<c:if test="${not empty aluno }">
-							<div class="d-flex gap-2 justify-content-center py-2">
-								<input type="submit" id="botao" name="botao" value="Matricular" class="btn btn-success mb-3">
-							</div>
-						</c:if>
 							</div>
 							</div>
 						</form>
-						</c:if>
-						<c:if test="${periodoValido == false}">
-							<h3>
-								<b>Fora do período de matrícula</b>
-							</h3>
-						</c:if>
 					</div>
 				</div>
 			</div>
