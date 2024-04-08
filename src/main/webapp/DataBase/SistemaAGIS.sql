@@ -652,3 +652,35 @@ BEGIN
 		INSERT INTO matriculaDisciplina VALUES (@codigo_matricula, @codigo_disciplina, 'Cursando', 0.0)
 	END
 END
+GO
+CREATE PROCEDURE sp_iud_telefone
+ @acao CHAR(1), 
+ @numero VARCHAR(100), 
+ @aluno VARCHAR(100), 
+ @tipo VARCHAR(100),
+ @saida VARCHAR(100) OUTPUT
+AS
+BEGIN
+    IF (@acao = 'I')
+    BEGIN
+        INSERT INTO telefone VALUES (@aluno, @numero, @tipo) 
+        SET @saida = 'Telefone inserido com sucesso'
+    END
+    ELSE IF (@acao = 'U')
+    BEGIN
+        UPDATE telefone 
+        SET tipo = @tipo
+        WHERE aluno = @aluno AND numero = @numero
+        SET @saida = 'Telefone alterado com sucesso'
+    END
+    ELSE IF (@acao = 'D')
+    BEGIN
+        DELETE FROM telefone WHERE aluno = @aluno AND numero = @numero
+        SET @saida = 'Telefone excluído com sucesso'
+    END
+    ELSE
+    BEGIN
+        RAISERROR('Operação inválida', 16, 1)
+        RETURN
+    END
+END
