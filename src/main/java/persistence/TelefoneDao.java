@@ -27,11 +27,11 @@ public class TelefoneDao implements ICrud<Telefone>, ITelefoneDao {
 	    sql.append("SELECT a.CPF AS cpfAluno, a.nome AS nomeAluno, t.numero, t.tipo ");
 	    sql.append("FROM aluno a ");
 	    sql.append("JOIN telefone t ON a.CPF = t.aluno ");
-	    sql.append("WHERE a.CPF = ? AND t.codigo = ?");
+	    sql.append("WHERE a.CPF = ? AND t.numero = ?");
 
 	    PreparedStatement ps = con.prepareStatement(sql.toString());
 	    ps.setString(1, t.getAluno().getCPF()); 
-	    ps.setInt(2, t.getCodigo()); 
+	    ps.setString(2, t.getNumero()); 
 	    ResultSet rs = ps.executeQuery();
 	    
 	    if (rs.next()) {
@@ -64,7 +64,7 @@ public class TelefoneDao implements ICrud<Telefone>, ITelefoneDao {
 	    Connection con = gDao.getConnection();
 	    StringBuffer sql = new StringBuffer();
 	    
-	    sql.append("SELECT t.codigo, a.CPF AS cpfAluno, a.nome AS nomeAluno, t.numero, t.tipo ");
+	    sql.append("SELECT a.CPF AS cpfAluno, a.nome AS nomeAluno, t.numero, t.tipo ");
 	    sql.append("FROM aluno a ");
 	    sql.append("JOIN telefone t ON a.CPF = t.aluno ");
 	    sql.append("WHERE a.CPF = ?");
@@ -75,14 +75,13 @@ public class TelefoneDao implements ICrud<Telefone>, ITelefoneDao {
 
 	    while (rs.next()) {
 	        Telefone t = new Telefone();
-	        t.setCodigo(rs.getInt("codigo"));
+	        t.setNumero(rs.getString("numero"));
+	        t.setTipo(rs.getString("tipo"));
 	        
 	        Aluno a = new Aluno();
 	        a.setCPF(rs.getString("cpfAluno"));
 	        a.setNome(rs.getString("nomeAluno"));
-	        t.setAluno(a);
-	        t.setNumero(rs.getString("numero"));
-	        t.setTipo(rs.getString("tipo"));	      
+	        t.setAluno(a);      
 	        telefones.add(t);
 	    }
 
@@ -93,20 +92,17 @@ public class TelefoneDao implements ICrud<Telefone>, ITelefoneDao {
 	    return telefones;
 	}
 
-	@Override
-
-	public String iudTelefone(String acao, Telefone t) throws SQLException, ClassNotFoundException {
+	public String iudTelefone(String acao, Telefone t, Aluno a) throws SQLException, ClassNotFoundException {
 		Connection c = gDao.getConnection();
-		String sql = "{CALL sp_iud_telefone (?,?,?,?,?,?)}";
+		String sql = "{CALL sp_iud_telefone (?,?,?,?,?)}";
 		CallableStatement cs = c.prepareCall(sql);
 		cs.setString(1, acao);
-		cs.setInt(2, t.getCodigo());
-		cs.setString(3, t.getAluno().getCPF());
-		cs.setString(4, t.getNumero());
-		cs.setString(5, t.getTipo());
-		cs.registerOutParameter(6, Types.VARCHAR);
+		cs.setString(2, t.getNumero());
+		cs.setString(3, a.getCPF());
+		cs.setString(4, t.getTipo());
+		cs.registerOutParameter(5, Types.VARCHAR);
 		cs.execute();
-		String saida = cs.getString(6);
+		String saida = cs.getString(5);
 		cs.close();
 		c.close();
 

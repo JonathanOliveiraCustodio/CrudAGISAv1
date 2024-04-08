@@ -29,8 +29,9 @@ public class TelefoneServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String erro = "";
 		String aluno = request.getParameter("aluno");
-		//Aluno a = new Aluno();
 		List<Telefone> telefones = new ArrayList<>();
+		Aluno a = new Aluno();
+		a.setCPF(aluno);
 		
 		try {
 			telefones = listarTelefones(aluno);
@@ -41,6 +42,7 @@ public class TelefoneServlet extends HttpServlet {
 		} finally {
 			request.setAttribute("erro", erro);
 			request.setAttribute("telefones", telefones);
+			request.setAttribute("aluno", a);
 
 			RequestDispatcher rd = request.getRequestDispatcher("telefone.jsp");
 			rd.forward(request, response);
@@ -49,8 +51,7 @@ public class TelefoneServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    // Entrada
-	    String cmd = request.getParameter("botao");
-	    String codigo = request.getParameter("codigo");    
+	    String cmd = request.getParameter("botao");   
 	    String aluno = request.getParameter("aluno");
 	    String numero = request.getParameter("numero");
 	    String tipo = request.getParameter("tipo");
@@ -80,22 +81,19 @@ public class TelefoneServlet extends HttpServlet {
 	            t.setTipo(tipo);
 	        }
 	        
-	        telefones = listarTelefones(aluno);
-	        
-	        if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {             
-	            t.setCodigo(Integer.parseInt(codigo));
+	        if (cmd.contains("Cadastrar") || cmd.contains("Alterar")) {        
 	            t.setNumero(numero);
 	            t.setTipo(tipo);        
 	        }
 
 	        if (cmd.contains("Cadastrar")) {
-	            saida = cadastrarTelefone(t);
+	            saida = cadastrarTelefone(t, a);
 	        }
 	        if (cmd.contains("Alterar")) {
-	            saida = alterarTelefone(t);
+	            saida = alterarTelefone(t, a);
 	        }
 	        if (cmd.contains("Excluir")) {       
-	            saida = excluirTelefone(t);
+	            saida = excluirTelefone(t, a);
 	        }
 	        if (cmd.contains("Buscar")) {
 	            t = buscarTelefone(t);
@@ -104,9 +102,7 @@ public class TelefoneServlet extends HttpServlet {
 	            }
 	        }
 	        
-	        if (cmd.contains("Listar")) {
-	            telefones = listarTelefones(aluno);
-	        }
+	        telefones = listarTelefones(aluno);
 	        
 	    } catch (SQLException | ClassNotFoundException e) {
 	        erro = e.getMessage();
@@ -114,32 +110,33 @@ public class TelefoneServlet extends HttpServlet {
 	        request.setAttribute("saida", saida);
 	        request.setAttribute("erro", erro);
 	        request.setAttribute("telefone", t);
-	        request.setAttribute("telefones", telefones);   
+	        request.setAttribute("telefones", telefones);
+	        request.setAttribute("aluno", a);
 	        RequestDispatcher rd = request.getRequestDispatcher("telefone.jsp");
 	        rd.forward(request, response);
 	    }
 	}
 
-	private String cadastrarTelefone(Telefone a) throws SQLException, ClassNotFoundException {
+	private String cadastrarTelefone(Telefone a, Aluno al) throws SQLException, ClassNotFoundException {
 		GenericDao gDao = new GenericDao();
 		TelefoneDao pDao = new TelefoneDao(gDao);
-		String saida = pDao.iudTelefone("I", a);
+		String saida = pDao.iudTelefone("I", a, al);
 		return saida;
 
 	}
 
-	private String alterarTelefone(Telefone a) throws SQLException, ClassNotFoundException {
+	private String alterarTelefone(Telefone a, Aluno al) throws SQLException, ClassNotFoundException {
 		GenericDao gDao = new GenericDao();
 		TelefoneDao pDao = new TelefoneDao(gDao);
-		String saida = pDao.iudTelefone("U", a);
+		String saida = pDao.iudTelefone("U", a, al);
 		return saida;
 
 	}
 
-	private String excluirTelefone(Telefone a) throws SQLException, ClassNotFoundException {
+	private String excluirTelefone(Telefone a, Aluno al) throws SQLException, ClassNotFoundException {
 		GenericDao gDao = new GenericDao();
 		TelefoneDao pDao = new TelefoneDao(gDao);
-		String saida = pDao.iudTelefone("D", a);
+		String saida = pDao.iudTelefone("D", a, al);
 		return saida;
 
 	}
