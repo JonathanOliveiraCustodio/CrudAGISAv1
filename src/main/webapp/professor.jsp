@@ -26,7 +26,7 @@
 	<div class="container py-4">
 		<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow">
 			<div class="container-fluid py-5">
-				<h1 class="display-5 fw-bold">Manutenção de Profesor</h1>
+				<h1 class="display-5 fw-bold">Manutenção de Professor</h1>
 		        <div class="d-flex gap-2 justify-content-center py-2">
 					<form action="professor" method="post" class="row g-3 mt-3">
 						<label for="data" class="form-label col-md-1">Código:</label> 
@@ -106,7 +106,7 @@
 					<tr>
 						<th>Codigo</th>
 						<th>Nome</th>
-						<th>Titulaï¿½ï¿½o</th>
+						<th>Titulação</th>
 					</tr>
 				</thead>
 				<tbody class="table-group-divider">

@@ -9,29 +9,31 @@ nome					VARCHAR(100)									NOT NULL,
 cargaHoraria			INT												NOT NULL,			
 sigla					VARCHAR(10)										NOT NULL,
 ultimaNotaENADE			DECIMAL(5,2)									NOT NULL,
-turno					VARCHAR(20)										NOT NULL
+turno					VARCHAR(20)										NOT NULL,
+periodo_matricula_inicio	DATE										NULL,
+periodo_matricula_fim	DATE											NULL,
 PRIMARY KEY  (codigo)
 )
 GO
 CREATE TABLE aluno (
-    CPF							CHAR(11) UNIQUE,
-    nome						VARCHAR(100),
-    nomeSocial					VARCHAR(100),
-    dataNascimento				DATE,
-    telefoneContato				VARCHAR(20),
-    emailPessoal				VARCHAR(100),
-    emailCorporativo			VARCHAR(100),
-    dataConclusao2Grau			DATE,
-    instituicaoConclusao2Grau	VARCHAR(100),
-    pontuacaoVestibular			DECIMAL(5,2),
-    posicaoVestibular			INT,
-    anoIngresso					INT,
-    semestreIngresso			INT,
-    semestreAnoLimiteGraduacao  DATE,
-    RA							INT,
-	curso						INT
-	PRIMARY KEY (CPF)
-	FOREIGN KEY (curso) REFERENCES curso(codigo)
+CPF							CHAR(11) UNIQUE,
+nome						VARCHAR(100),
+nomeSocial					VARCHAR(100),
+dataNascimento				DATE,
+telefoneContato				VARCHAR(20),
+emailPessoal				VARCHAR(100),
+emailCorporativo			VARCHAR(100),
+dataConclusao2Grau			DATE,
+instituicaoConclusao2Grau	VARCHAR(100),
+pontuacaoVestibular			DECIMAL(5,2),
+posicaoVestibular			INT,
+anoIngresso					INT,
+semestreIngresso			INT,
+semestreAnoLimiteGraduacao  DATE,
+RA							INT,
+curso						INT
+PRIMARY KEY (CPF)
+FOREIGN KEY (curso) REFERENCES curso(codigo)
 )
 GO
 CREATE TABLE professor (
@@ -45,7 +47,7 @@ CREATE TABLE disciplina (
 codigo				INT IDENTITY (1001,1)		NOT NULL,
 nome				VARCHAR(100)				NOT NULL,
 horasSemanais		INT							NOT NULL,
-horarioInicio       VARCHAR(10)       				    NOT NULL,
+horarioInicio       VARCHAR(10)       		    NOT NULL,
 semestre			INT							NOT NULL,
 diaSemana			VARCHAR(20)					NOT NULL,
 codigoProfessor		INT							NOT NULL,
@@ -91,77 +93,19 @@ PRIMARY KEY   (codigo)
 FOREIGN KEY (codigoDisciplina) REFERENCES disciplina (codigo)
 )
 GO
-
--- Inserindo registros na tabela matricula
-INSERT INTO matricula (codigo, codigoAluno, dataMatricula, semestre)
-VALUES
-(1, '12345678910', '2022-01-10', 1),
-(2, '12345678910', '2022-07-28', 2),
-(3, '39590327060', '2024-01-28', 1),
-(4, '39590327060', '2024-07-28', 2),
-(5, '39590327060', '2025-03-28', 3),
-(6, '55566677788', '2024-03-28', 1),
-(7, '55566677788', '2024-03-28', 1),
-(8, '98765432198', '2021-01-1', 3),
-(9, '98765432198', '2021-07-28', 4);
-
-SELECT * FROM aluno;
-INSERT INTO matriculaDisciplina VALUES (15, 1005, 'LOL', 9.00)
-
-
-SELECT d.codigo, d.nome AS nomeDisciplina, d.horasSemanais, SUBSTRING(d.horarioInicio, 1, 5) AS horarioInicio, d.semestre, d.diaSemana
-FROM disciplina d WHERE d.codigoCurso = 1
-AND d.codigo NOT IN (SELECT codigoDisciplina FROM matriculaDisciplina WHERE situacao = 'Aprovado' AND CodigoMatricula IN (SELECT codigo FROM matricula WHERE codigoAluno = '09129892031'))
-
-
--- Inserindo registros na tabela matriculaDisciplina
-INSERT INTO matriculaDisciplina (CodigoMatricula, codigoDisciplina, situacao, notaFinal)
-VALUES
-(1,1033,'Aprovado', 8.5),
-(1,1034,'Reprovado', 5.0),
-(1,1035,'Aprovado', 7.2),
-(2,1036,'Reprovado', 4.8),
-(2,1037,'Aprovado', 9.0),
-(2,1035,'Reprovado', 6.5),
-(3,1038,'Aprovado', 8.0),
-(4,1029, 'Reprovado', 4.0),
-(4,1015, 'Aprovado', 7.8),
-(5,1035, 'Reprovado', 3.5);
-
-INSERT INTO curso (codigo, nome, cargaHoraria, sigla, ultimaNotaENADE, turno) 
+INSERT INTO curso (codigo, nome, cargaHoraria, sigla, ultimaNotaENADE, turno, periodo_matricula_inicio, periodo_matricula_fim) 
 VALUES 
-(1, 'Administração de Empresas', 4000, 'ADM', 7.8, 'Matutino'),
-(2, 'Engenharia Civil', 4500, 'ENG CIV', 8.5, 'Vespertino'),
-(3, 'Direito', 4000, 'DIR', 8.2, 'Noturno'),
-(4, 'Medicina', 6000, 'MED', 9.3, 'Integral'),
-(5, 'Ciência da Computação', 3600, 'CC', 8.9, 'Matutino'),
-(6, 'Psicologia', 4200, 'PSI', 8.0, 'Vespertino'),
-(7, 'Administração Pública', 3800, 'ADM PUB', 7.5, 'Noturno'),
-(8, 'Engenharia Elétrica', 4800, 'ENG ELE', 8.7, 'Integral'),
-(9, 'Gastronomia', 3200, 'GAS', 7.0, 'Matutino'),
-(10, 'Arquitetura e Urbanismo', 4200, 'ARQ', 8.4, 'Vespertino');
-
-INSERT INTO professor VALUES
-(1, 'João Silva', 'Doutor'),
-(2, 'Maria Santos', 'Mestre'),
-(3, 'Carlos Oliveira', 'Doutor'),
-(4, 'Ana Costa', 'Mestre'),
-(5, 'Pedro Mendes', 'Doutor'),
-(6, 'Marta Pereira', 'Mestre'),
-(7, 'Ricardo Almeida', 'Doutor'),
-(8, 'Sofia Ramos', 'Mestre'),
-(9, 'Luís Fernandes', 'Doutor'),
-(10, 'Catarina Sousa', 'Mestre')
-
-INSERT INTO disciplina (nome, horasSemanais, horarioInicio, semestre, diaSemana, codigoProfessor, codigoCurso)
-VALUES
-('Matemática2', 4, '08:00', 1, 'Segunda-feira', 1, 1),
-('Matemática', 4, '08:00', 1, 'Segunda-feira', 1, 10),
-('Física', 3, '10:00', 1, 'Terça-feira', 1, 8),
-('Química', 3, '13:00', 2, 'Quarta-feira', 3, 6),
-('Biologia', 2, '09:00', 2, 'Quinta-feira', 4, 1),
-('História', 2, '11:00', 1, 'Sexta-feira', 5, 1);
-
+(1, 'Administração de Empresas', 4000, 'ADM', 7.8, 'Matutino', '2024-01-01', '2024-01-01'),
+(2, 'Engenharia Civil', 4500, 'ENG CIV', 8.5, 'Vespertino', '2024-01-01', '2024-01-01'),
+(3, 'Direito', 4000, 'DIR', 8.2, 'Noturno', '2024-01-01', '2024-01-01'),
+(4, 'Medicina', 6000, 'MED', 9.3, 'Integral', '2024-01-01', '2024-01-01'),
+(5, 'Ciência da Computação', 3600, 'CC', 8.9, 'Matutino', '2024-01-01', '2024-01-01'),
+(6, 'Psicologia', 4200, 'PSI', 8.0, 'Vespertino', '2024-01-01', '2024-01-01'),
+(7, 'Administração Pública', 3800, 'ADM PUB', 7.5, 'Noturno', '2024-01-01', '2024-01-01'),
+(8, 'Engenharia Elétrica', 4800, 'ENG ELE', 8.7, 'Integral', '2024-01-01', '2024-01-01'),
+(9, 'Gastronomia', 3200, 'GAS', 7.0, 'Matutino', '2024-01-01', '2024-01-01'),
+(10, 'Arquitetura e Urbanismo', 4200, 'ARQ', 8.4, 'Vespertino', '2024-01-01', '2024-01-01');
+GO
 INSERT INTO aluno (CPF, nome, nomeSocial, dataNascimento, telefoneContato, emailPessoal, emailCorporativo, dataConclusao2Grau, instituicaoConclusao2Grau, pontuacaoVestibular, posicaoVestibular, anoIngresso, semestreIngresso, semestreAnoLimiteGraduacao, RA, curso)
 VALUES
     ('55312103020', 'João Silva', NULL, '1998-05-15', '123456789', 'joao@email.com', 'joao@empresa.com', '2016-12-20', 'Escola Estadual ABC', 8.75, 25, 2016, 1, '2020-12-31', 123456, 1),
@@ -174,47 +118,93 @@ VALUES
     ('12697967044', 'Carla Pereira', NULL, '2001-04-08', '987321654', 'carla@email.com', 'carla@empresa.com', '2017-12-15', 'Colégio Municipal OPQ', 8.45, 50, 2017, 1, '2021-12-31', 890123, 2),
     ('29180596096', 'Marcos Fernandes', NULL, '1997-10-20', '654321789', 'marcos@email.com', 'marcos@empresa.com', '2016-06-18', 'Escola Estadual RST', 8.95, 5, 2016, 1, '2020-12-31', 901234, 1),
     ('30260403040', 'Aline Rocha', NULL, '2000-01-12', '321654987', 'aline@email.com', 'aline@empresa.com', '2017-08-20', 'Colégio Particular UVW', 8.60, 45, 2017, 2, '2021-12-31', 123450, 2);
-
+GO
+INSERT INTO professor VALUES
+(1, 'João Silva', 'Doutor'),
+(2, 'Maria Santos', 'Mestre'),
+(3, 'Carlos Oliveira', 'Doutor'),
+(4, 'Ana Costa', 'Mestre'),
+(5, 'Pedro Mendes', 'Doutor'),
+(6, 'Marta Pereira', 'Mestre'),
+(7, 'Ricardo Almeida', 'Doutor'),
+(8, 'Sofia Ramos', 'Mestre'),
+(9, 'Luís Fernandes', 'Doutor'),
+(10, 'Catarina Sousa', 'Mestre')
+GO
+INSERT INTO disciplina (nome, horasSemanais, horarioInicio, semestre, diaSemana, codigoProfessor, codigoCurso)
+VALUES
+('Matemática Avançada', 4, '08:00', 2, 'Segunda-feira', 1, 1),
+('Matemática', 4, '08:00', 1, 'Segunda-feira', 1, 10),
+('Física', 3, '10:00', 1, 'Terça-feira', 1, 8),
+('Química', 3, '13:00', 2, 'Quarta-feira', 3, 6),
+('Biologia', 2, '09:00', 2, 'Quinta-feira', 4, 1),
+('História', 2, '11:00', 1, 'Sexta-feira', 5, 1);
+GO
+INSERT INTO matricula (codigo, codigoAluno, dataMatricula, semestre)
+VALUES
+(1, '55312103020', '2022-01-10', 1),
+(2, '55312103020', '2022-07-28', 2),
+(3, '86462326034', '2024-01-28', 1),
+(4, '86462326034', '2024-07-28', 2),
+(5, '39112829072', '2025-03-28', 1),
+(6, '39112829072', '2024-03-28', 2),
+(7, '39590327060', '2024-03-28', 1),
+(8, '39590327060', '2021-01-1', 2),
+(9, '39590327060', '2021-07-28', 3);
+GO
+INSERT INTO matriculaDisciplina (CodigoMatricula, codigoDisciplina, situacao, notaFinal)
+VALUES
+(1,1001,'Aprovado', 8.5),
+(1,1002,'Reprovado', 5.0),
+(1,1003,'Aprovado', 7.2),
+(2,1001,'Reprovado', 4.8),
+(2,1002,'Aprovado', 9.0),
+(2,1003,'Reprovado', 6.5),
+(3,1001,'Aprovado', 8.0),
+(4,1002, 'Reprovado', 4.0),
+(4,1003, 'Aprovado', 7.8),
+(5,1001, 'Reprovado', 3.5);
+GO
 INSERT INTO conteudo VALUES 
     (1, 'Álgebra', 'Estudo dos números e operações', 1003),
     (2, 'Geometria', 'Estudo das formas e dos espaços', 1003),
     (3, 'Cálculo Diferencial', 'Estudo das taxas de variação', 1003),
-    (4, 'Células', 'Unidades básicas da vida', 1006),
-    (5, 'Energia', 'Capacidade de realizar trabalho', 1006),
-    (6, 'Evolução', 'Desenvolvimento das espécies ao longo do tempo', 1006),
-    (7, 'Idade Média', 'Período histórico entre os séculos V e XV', 1007),
-    (8, 'Revolução Industrial', 'Transformações econômicas e sociais no século XVIII', 1007),
-    (9, 'Descobrimento do Brasil', 'Chegada dos portugueses em 1500', 1007),
-    (10, 'Relevo Brasileiro', 'Características geográficas do país', 1007),
-    (11, 'Literatura Brasileira', 'Produções literárias do Brasil', 1008),
-    (12, 'Gramática', 'Estudo da estrutura e funcionamento da língua', 1008),
+    (4, 'Células', 'Unidades básicas da vida', 1005),
+    (5, 'Energia', 'Capacidade de realizar trabalho', 1005),
+    (6, 'Evolução', 'Desenvolvimento das espécies ao longo do tempo', 1005),
+    (7, 'Idade Média', 'Período histórico entre os séculos V e XV', 1001),
+    (8, 'Revolução Industrial', 'Transformações econômicas e sociais no século XVIII', 1001),
+    (9, 'Descobrimento do Brasil', 'Chegada dos portugueses em 1500', 1002),
+    (10, 'Relevo Brasileiro', 'Características geográficas do país', 1002),
+    (11, 'Literatura Brasileira', 'Produções literárias do Brasil', 1004),
+    (12, 'Gramática', 'Estudo da estrutura e funcionamento da língua', 1004),
     (13, 'Equações', 'Expressões matemáticas com incógnitas', 1003),
     (14, 'Fisiologia', 'Estudo das funções dos organismos vivos', 1005),
     (15, 'Guerra Fria', 'Conflito político entre EUA e URSS', 1005),
-    (16, 'Globalização', 'Integração econômica e cultural mundial', 1009),
-    (17, 'Morfologia', 'Estudo da estrutura das palavras', 1009),
-    (18, 'Polinômios', 'Expressões algébricas com várias variáveis',1009),
+    (16, 'Globalização', 'Integração econômica e cultural mundial', 1004),
+    (17, 'Morfologia', 'Estudo da estrutura das palavras', 1004),
+    (18, 'Polinômios', 'Expressões algébricas com várias variáveis',1004),
     (19, 'Genética', 'Estudo dos genes e hereditariedade', 1003),
     (20, 'Renascimento', 'Movimento cultural e artístico do século XVI', 1004);
-
-SELECT * FROM curso
-
+GO
 CREATE VIEW v_listarCurso AS
 SELECT codigo, nome, cargaHoraria, sigla, ultimaNotaENADE, turno FROM curso
-
+GO
 CREATE VIEW v_periodoMatricula AS
 SELECT TOP 1 periodo_matricula_inicio, periodo_matricula_fim FROM curso ORDER BY codigo ASC
-
+GO
 CREATE VIEW v_listarAluno AS
 SELECT a.CPF, a.nome, a.nomeSocial, a.dataNascimento, a.telefoneContato,
 a.emailPessoal, a.emailCorporativo, a.dataConclusao2Grau, a.instituicaoConclusao2Grau, 
 a.pontuacaoVestibular, a.posicaoVestibular, a.anoIngresso, a.semestreIngresso, 
 a.semestreAnoLimiteGraduacao, a.RA, c.codigo AS codigoCurso, c.nome AS nomeCurso
 FROM aluno a JOIN curso c ON a.curso = c.codigo
-
-
-CREATE PROCEDURE sp_validatitulacao (@titulacao VARCHAR(50), @valido BIT OUTPUT)
+GO
+CREATE PROCEDURE sp_validatitulacao 
+	@titulacao VARCHAR(50),
+	@valido BIT OUTPUT
 AS
+BEGIN
    IF(@titulacao = 'Doutor' OR @titulacao = 'Mestre' OR @titulacao = 'Especialista')
    BEGIN 
        SET @valido =1
@@ -223,7 +213,8 @@ AS
    BEGIN 
        SET @valido = 0
    END
-
+END
+GO
 CREATE PROCEDURE sp_iud_professor 
     @acao CHAR(1), 
     @codigo INT, 
@@ -274,17 +265,7 @@ BEGIN
         SET @saida = 'Professor excluído com sucesso'
     END
 END
-
-
-
-
-
-DECLARE @out1 VARCHAR(100)
-EXEC sp_iud_professor 'U',1, 'João Silva', 'Doutor', @out1 OUTPUT
-PRINT @out1
-
-SELECT * FROM professor
-
+GO
 CREATE PROCEDURE sp_iud_curso 
     @acao CHAR(1), 
     @codigo INT, 
@@ -354,15 +335,7 @@ BEGIN
     END
 END
 END
-
-
-DECLARE @out1 VARCHAR(100);
-EXEC sp_iud_curso 'I', 12, 'Curso Teste', 400, 'CT', 8.5, 'Manhã', @out1 OUTPUT;
-PRINT @out1;
-
-
-
--- Procedure que Valida CPF
+GO
 CREATE PROCEDURE sp_validaCPF 
     @CPF CHAR(11),
     @valido BIT OUTPUT
@@ -409,7 +382,7 @@ BEGIN
         END;
     END;
 END;
-
+GO
 CREATE PROCEDURE sp_ValidarIdade 
     @dataNascimento DATE,
     @valido BIT OUTPUT
@@ -426,8 +399,7 @@ BEGIN
         SET @valido = 1; -- Idade válida
     END;
 END;
-
-
+GO
 CREATE PROCEDURE sp_CalcularDataLimiteGraduacao 
     @anoIngresso INT,
     @dataLimiteGraduacao DATE OUTPUT
@@ -435,7 +407,7 @@ AS
 BEGIN
     SET @dataLimiteGraduacao = DATEADD(YEAR, 5, DATEFROMPARTS(@anoIngresso, 1, 1));
 END;
-
+GO
 CREATE PROCEDURE sp_GerarRA 
     @AnoIngresso INT,
     @SemestreIngresso INT,
@@ -444,8 +416,7 @@ AS
 BEGIN
     SET @RA = CAST(@AnoIngresso AS VARCHAR(4)) + CAST(@SemestreIngresso AS VARCHAR(2)) + RIGHT('0000' + CAST(CAST(RAND() * 10000 AS INT) AS VARCHAR), 4);
 END;
-
--- Procedure para Inserir, Atualizar ou Deletar Aluno
+GO
 CREATE PROCEDURE sp_iud_aluno 
     @acao CHAR(1), 
     @CPF CHAR(11), 
@@ -535,17 +506,7 @@ BEGIN
         RETURN;
     END;
 END;
-
-
-DECLARE @saida VARCHAR(100);
-DECLARE @semestreAnoLimiteGraduacao DATE;
-DECLARE @RA VARCHAR(10);
-
-EXEC sp_iud_aluno 'D', '12345678910', 'Jonathan', 'fulano social', '1990-07-31', '123456789', 'fulano@email.com', NULL, NULL, NULL, 750.20, 1, 2020, 1, @semestreAnoLimiteGraduacao OUTPUT, @RA OUTPUT,1, @saida OUTPUT;
-
-PRINT @saida;
-
-SELECT * FROM aluno
+GO
 CREATE PROCEDURE sp_iud_disciplina
     @acao CHAR(1),
     @codigo INT,
@@ -589,21 +550,7 @@ BEGIN
         RETURN
     END
 END
-SELECT * FROM disciplina
-
-
-
-
-
-
-DECLARE @out1 VARCHAR(100)
-EXEC sp_iud_disciplina 'I', 2, 'Nome da Disciplina', 4, '13:00', 2,'Segunda-Feira', 1, 1, @out1 OUTPUT
-PRINT @out1
-
-SELECT d.codigo, d.nome AS nomeDisciplina, d.horasSemanais, d.horarioInicio, d.semestre, d.diaSemana, p.nome AS nomeProfessor, c.nome AS nomeCurso 
-FROM disciplina d JOIN professor p ON d.codigoProfessor = p.codigo 
-JOIN curso c ON d.codigoCurso = c.codigo 
-
+GO
 CREATE PROCEDURE sp_iud_conteudo 
  @acao CHAR(1), 
  @codigo INT, 
@@ -637,7 +584,7 @@ BEGIN
         RETURN
     END
 END
-
+GO
 CREATE PROCEDURE sp_u_periodomatricula 
  @periodo_inicio DATE, 
  @periodo_fim DATE,
@@ -655,39 +602,7 @@ BEGIN
         RETURN
     END
 END
-
-DECLARE @out1 VARCHAR(100)
-EXEC sp_u_periodomatricula '01-01-2024', '22-01-2024', @out1 OUTPUT
-PRINT @out1
-
-CREATE PROCEDURE sp_u_periodomatricula 
- @periodo_inicio DATE, 
- @periodo_fim DATE,
- @saida VARCHAR(100) OUTPUT
-AS
-BEGIN
-    IF (@periodo_inicio IS NOT NULL AND @periodo_fim IS NOT NULL AND @periodo_fim > @periodo_inicio)
-    BEGIN
-        UPDATE curso SET periodo_matricula_inicio = @periodo_inicio, periodo_matricula_fim = @periodo_fim
-        SET @saida = 'Período de matrícula alterado com sucesso'
-    END
-    ELSE
-    BEGIN
-        RAISERROR('Datas inválidas', 16, 1)
-        RETURN
-    END
-END
-
-DECLARE @out1 VARCHAR(100)
-EXEC sp_u_periodomatricula '01-01-2024', '22-01-2024', @out1 OUTPUT
-PRINT @out1
-
-
--- Teste da Procedure
-DECLARE @out1 VARCHAR(100)
-EXEC sp_iud_conteudo 'D', 31, 'Nome do Conteúdo ALterado', 'Descrição do Conteúdo', 1003, @out1 OUTPUT
-PRINT @out1
-
+GO
 CREATE PROCEDURE sp_nova_matricula
 	@codigo_aluno	CHAR(11),
 	@saida VARCHAR(100) OUTPUT
@@ -709,13 +624,7 @@ BEGIN
 
 	INSERT INTO matricula VALUES (@codigo, @codigo_aluno, GETDATE(), @semestre)
 END
-
-DECLARE @out1 VARCHAR(100)
-EXEC sp_nova_matricula '55312103020', @out1 OUTPUT
-PRINT @out1
-
-SELECT * FROM matricula WHERE codigoAluno = '39112829072'
-
+GO
 CREATE PROCEDURE sp_matricular_disciplina
 	@codigo_disciplina	INT,
 	@codigo_matricula	INT,
@@ -743,9 +652,3 @@ BEGIN
 		INSERT INTO matriculaDisciplina VALUES (@codigo_matricula, @codigo_disciplina, 'Cursando', 0.0)
 	END
 END
-
-DECLARE @out1 BIT
-EXEC sp_matricular_disciplina 1004, 1, @out1 OUTPUT
-PRINT @out1
-
-SELECT * FROM matriculaDisciplina 

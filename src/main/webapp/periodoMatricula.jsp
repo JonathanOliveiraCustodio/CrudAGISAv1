@@ -15,10 +15,10 @@
 	<div class="container py-4">
 		<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow">
 			<div class="container-fluid py-5">
-				<h1 class="display-5 fw-bold">PerÃ­odo de MatrÃ­cula</h1>
+				<h1 class="display-5 fw-bold">Período de Matrícula</h1>
 		        <div class="d-flex gap-2 justify-content-center py-2">
 					<form action="periodoMatricula" method="post" class="row g-3 mt-3">
-						<label for="data" class="form-label col-md-1">InÃ­cio:</label> 
+						<label for="data" class="form-label col-md-1">Início:</label> 
 						<div class="col-md-3">	
 							<input class="form-control" type="date" id="periodoMatriculaInicio"
 							name="periodoMatriculaInicio"
