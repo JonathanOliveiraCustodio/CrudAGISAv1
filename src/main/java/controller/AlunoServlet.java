@@ -104,7 +104,7 @@ public class AlunoServlet extends HttpServlet {
 				a.setPosicaoVestibular(Integer.parseInt(posicaoVestibular));
 				a.setAnoIngresso(Integer.parseInt(anoIngresso));
 				a.setSemestreIngresso(Integer.parseInt(semestreIngresso));
-				a.setSemestreAnoLimiteGraduacao((semestreAnoLimiteGraduacao));
+				a.setSemestreAnoLimiteGraduacao(Date.valueOf(semestreAnoLimiteGraduacao));
 				a.setRA(Integer.parseInt(RA));
 
 				c.setCodigo(Integer.parseInt(curso));

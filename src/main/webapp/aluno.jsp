@@ -138,8 +138,7 @@
 							<input class="form-control" type="date"
 								id="semestreAnoLimiteGraduacao" name="semestreAnoLimiteGraduacao"
 								placeholder="Semestre Limite Graduação"
-								value='<c:out value="${aluno.semestreAnoLimiteGraduacao }"></c:out>'
-								readonly onkeypress="showAlert()">
+								value='<c:out value="${aluno.semestreAnoLimiteGraduacao }"></c:out>'>
 						</div>
 						<label for="data" class="form-label col-md-1">Curso:</label>
 						<div class="col-md-4">	

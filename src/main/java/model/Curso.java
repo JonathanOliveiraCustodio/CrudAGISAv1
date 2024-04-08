@@ -1,5 +1,7 @@
 package model;
 
+import java.sql.Date;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +14,8 @@ public class Curso {
     String sigla;
     float ultimaNotaENADE;
     String turno;
+    Date periodoMatriculaInicio;
+    Date periodoMatriculaFim;
     
     @Override
 	public String toString() {

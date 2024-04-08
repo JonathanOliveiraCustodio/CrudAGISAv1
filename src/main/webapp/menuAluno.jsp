@@ -12,7 +12,7 @@
 		<jsp:include page="headerAluno.jsp" />
 	</div>
 	<div class="container py-4">
-		<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center">
+		<div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center shadow">
 			<div class="container-fluid py-5">
 				<h1 class="display-5 fw-bold">Bem-vindo Aluno ao Sistema AGIS</h1>
 		      	<p class="lead">Aqui você pode realizar as seguintes opções:</p>

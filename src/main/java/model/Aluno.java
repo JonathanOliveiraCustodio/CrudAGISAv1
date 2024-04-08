@@ -24,7 +24,7 @@ public class Aluno {
 	int posicaoVestibular;
 	int anoIngresso;
 	int semestreIngresso;
-	String semestreAnoLimiteGraduacao;
+	Date semestreAnoLimiteGraduacao;
 	int RA;
 	Curso curso;
 	

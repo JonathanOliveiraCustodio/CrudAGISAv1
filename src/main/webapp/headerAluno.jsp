@@ -18,8 +18,8 @@
   			AGIS</h3>
   		</a>
         <ul class="nav nav-pills">
-            <li class="nav-item"><a class="nav-link px-2 link-body-emphasis" href="matricula.jsp">Matricula</a></li>
-            <li class="nav-item"><a class="nav-link px-2 link-body-emphasis" href="#">Horários</a></li>
+            <li class="nav-item"><a class="nav-link px-2 link-body-emphasis" href="${pageContext.request.contextPath}/matricula">Matricula</a></li>
+            <li class="nav-item"><a class="nav-link px-2 link-body-emphasis" href="${pageContext.request.contextPath}/horarios">Horários</a></li>
         </ul>
   	</header>
   </div>

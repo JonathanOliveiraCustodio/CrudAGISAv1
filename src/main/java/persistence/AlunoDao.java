@@ -48,7 +48,55 @@ public class AlunoDao implements ICrud<Aluno>, IAlunoDao {
 	        a.setPosicaoVestibular(rs.getInt("posicaoVestibular"));
 	        a.setAnoIngresso(rs.getInt("anoIngresso"));
 	        a.setSemestreIngresso(rs.getInt("semestreIngresso"));
-	        a.setSemestreAnoLimiteGraduacao(rs.getString("semestreAnoLimiteGraduacao"));
+	        a.setSemestreAnoLimiteGraduacao(rs.getDate("semestreAnoLimiteGraduacao"));
+	        a.setRA(rs.getInt("RA"));
+	        
+	        Curso c = new Curso();
+	        c.setCodigo(rs.getInt("codigoCurso"));
+	        c.setNome(rs.getString("nomeCurso"));
+	        a.setCurso(c);
+
+	        rs.close();
+	        ps.close();
+	        con.close();
+	        return a;
+	    } else {
+	        rs.close();
+	        ps.close();
+	        con.close();
+	        return null;
+	    }
+	}
+	
+	public Aluno consultarPorRA(Aluno a) throws SQLException, ClassNotFoundException {
+	    Connection con = gDao.getConnection();
+	    StringBuilder sql = new StringBuilder();
+	    sql.append("SELECT a.CPF, a.nome, a.nomeSocial, a.dataNascimento, a.telefoneContato, ");
+	    sql.append("a.emailPessoal, a.emailCorporativo, a.dataConclusao2Grau, a.instituicaoConclusao2Grau, ");
+	    sql.append("a.pontuacaoVestibular, a.posicaoVestibular, a.anoIngresso, a.semestreIngresso, ");
+	    sql.append("a.semestreAnoLimiteGraduacao, a.RA, c.codigo AS codigoCurso, c.nome AS nomeCurso ");
+	    sql.append("FROM aluno a ");
+	    sql.append("JOIN curso c ON a.curso = c.codigo ");
+	    sql.append("WHERE a.RA = ?");
+
+	    PreparedStatement ps = con.prepareStatement(sql.toString());
+	    ps.setLong(1, a.getRA());
+	    ResultSet rs = ps.executeQuery();
+	    if (rs.next()) {
+	        a.setCPF(rs.getString("CPF"));
+	        a.setNome(rs.getString("nome"));
+	        a.setNomeSocial(rs.getString("nomeSocial"));
+	        a.setDataNascimento(rs.getDate("dataNascimento"));
+	        a.setTelefoneContato(rs.getString("telefoneContato"));
+	        a.setEmailPessoal(rs.getString("emailPessoal"));
+	        a.setEmailCorporativo(rs.getString("emailCorporativo"));
+	        a.setDataConclusao2Grau(rs.getDate("dataConclusao2Grau"));
+	        a.setInstituicaoConclusao2Grau(rs.getString("instituicaoConclusao2Grau"));
+	        a.setPontuacaoVestibular(rs.getFloat("pontuacaoVestibular"));
+	        a.setPosicaoVestibular(rs.getInt("posicaoVestibular"));
+	        a.setAnoIngresso(rs.getInt("anoIngresso"));
+	        a.setSemestreIngresso(rs.getInt("semestreIngresso"));
+	        a.setSemestreAnoLimiteGraduacao(rs.getDate("semestreAnoLimiteGraduacao"));
 	        a.setRA(rs.getInt("RA"));
 	        
 	        Curso c = new Curso();
@@ -96,7 +144,7 @@ public class AlunoDao implements ICrud<Aluno>, IAlunoDao {
 	        a.setPosicaoVestibular(rs.getInt("posicaoVestibular"));
 	        a.setAnoIngresso(rs.getInt("anoIngresso"));
 	        a.setSemestreIngresso(rs.getInt("semestreIngresso"));
-	        a.setSemestreAnoLimiteGraduacao(rs.getString("semestreAnoLimiteGraduacao"));
+	        a.setSemestreAnoLimiteGraduacao(rs.getDate("semestreAnoLimiteGraduacao"));
 	        a.setRA(rs.getInt("RA"));
 	        Curso c = new Curso();
 		    c.setNome(rs.getString("nomeCurso"));
@@ -132,7 +180,7 @@ public class AlunoDao implements ICrud<Aluno>, IAlunoDao {
 		cs.setInt(12, a.getPosicaoVestibular());
 		cs.setInt(13, a.getAnoIngresso());
 		cs.setInt(14, a.getSemestreIngresso());
-		cs.setString(15, a.getSemestreAnoLimiteGraduacao());		
+		cs.setDate(15, a.getSemestreAnoLimiteGraduacao());		
 		cs.setInt(16, a.getRA());
 		cs.setInt(17, a.getCurso().getCodigo());
 		cs.registerOutParameter(18, Types.VARCHAR);

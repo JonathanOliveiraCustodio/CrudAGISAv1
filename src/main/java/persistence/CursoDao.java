@@ -89,5 +89,38 @@ public class CursoDao implements ICrud<Curso>, ICursoDao {
 
 		return saida;
 	}
+	
+	public String alterarPeriodoMatricula(Curso c) throws SQLException, ClassNotFoundException {
+		Connection con = gDao.getConnection();
+		String sql = "{CALL sp_u_periodomatricula (?,?,?)}";
+		CallableStatement cs = con.prepareCall(sql);
+		cs.setDate(1, c.getPeriodoMatriculaInicio());
+		cs.setDate(2, c.getPeriodoMatriculaFim());
+		cs.registerOutParameter(3, Types.VARCHAR);
+		cs.execute();
+		
+		String saida = cs.getString(3);
+		cs.close();
+		con.close();
+
+		return saida;
+	}
+	
+	public Curso consultarPeriodoMatricula() throws SQLException, ClassNotFoundException {
+		Curso c = new Curso();
+		Connection con = gDao.getConnection();
+		String sql = "SELECT * FROM v_periodoMatricula";
+		PreparedStatement ps = con.prepareStatement(sql);
+		ResultSet rs = ps.executeQuery();
+		
+		if (rs.next()) {
+			c.setPeriodoMatriculaInicio(rs.getDate("periodo_matricula_inicio"));
+			c.setPeriodoMatriculaFim(rs.getDate("periodo_matricula_fim"));
+		}
+		rs.close();
+		ps.close();
+		con.close();
+		return c;
+	}
 
 }
